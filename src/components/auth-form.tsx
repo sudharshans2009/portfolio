@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/toast";
 
 export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const router = useRouter();
@@ -14,12 +15,10 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
     setPending(true);
 
     const result = isSignUp
@@ -28,10 +27,21 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
     setPending(false);
     if (result.error) {
-      setError(result.error.message || "Authentication failed. Please try again.");
+      toast.add({
+        type: "error",
+        title: isSignUp ? "Sign-up failed" : "Login failed",
+        description: result.error.message || "Authentication failed. Please try again.",
+      });
       return;
     }
 
+    toast.add({
+      type: "success",
+      title: isSignUp ? "Account created" : "Login successful",
+      description: isSignUp
+        ? "Your SS.me account is ready."
+        : "Welcome back to SS.me.",
+    });
     router.push("/profile");
     router.refresh();
   }
@@ -55,7 +65,6 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       <Button type="submit" disabled={pending} size="lg">
         {pending ? "Please wait…" : isSignUp ? "Create account" : "Login"}
       </Button>
-      {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
       <p className="text-xs text-muted-foreground">
         {isSignUp ? "Already have an account?" : "Need an account?"}{" "}
         <Link href={isSignUp ? "/user/sign-in" : "/user/sign-up"}>

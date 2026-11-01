@@ -98,5 +98,9 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [baseURL],
+  trustedOrigins: [
+    baseURL,
+    "https://sudharshans.me",
+    "https://www.sudharshans.me",
+  ],
 });

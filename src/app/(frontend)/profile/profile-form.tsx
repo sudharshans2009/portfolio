@@ -27,7 +27,7 @@ export default function ProfileForm() {
     }
   }, [imageUrl, name, session?.user]);
 
-  if (isPending) return <p className="max-w-[440px] text-[1.05rem] leading-6 text-muted-foreground">Loading your profile…</p>;
+  if (isPending) return null;
   if (!session?.user) {
     router.replace("/user/sign-in");
     return null;

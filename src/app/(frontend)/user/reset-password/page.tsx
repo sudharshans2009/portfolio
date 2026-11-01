@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,16 @@ function ResetPasswordForm() {
   const token = searchParams.get("token") || "";
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      toast.add({
+        type: "error",
+        title: "Invalid reset link",
+        description: "This reset link is missing or invalid.",
+      });
+    }
+  }, [token]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,7 +59,6 @@ function ResetPasswordForm() {
         <CardContent>
           {!token ? (
             <div className="grid gap-4 text-sm text-muted-foreground">
-              <p>This reset link is missing or invalid.</p>
               <Link className="text-foreground underline underline-offset-4" href="/user/forgot-password">Request a new link</Link>
             </div>
           ) : (

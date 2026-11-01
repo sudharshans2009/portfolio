@@ -3,6 +3,7 @@ import { generateMetadata } from "@/lib/metadata";
 import { getGitHubProjects, groupProjects } from "@/lib/github";
 import { siteConfig } from "@/lib/site-config";
 import ProjectCard from "@/components/project-card";
+import ProjectsUnavailable from "@/components/projects-unavailable";
 
 export const metadata = generateMetadata(
   "Projects — SS.me",
@@ -41,7 +42,7 @@ export default async function ProjectsPage() {
           ))}
         </div>
       ) : (
-        <p className="border-border border-y py-8 text-muted-foreground">Projects are unavailable right now.</p>
+        <ProjectsUnavailable />
       )}
       <a className="mt-7 inline-flex items-center gap-2 border border-foreground px-[18px] py-[13px] text-xs font-semibold transition-colors hover:bg-foreground hover:text-background" href={siteConfig.github} target="_blank" rel="noreferrer">
         <Github size={18} aria-hidden="true" /> View GitHub profile
