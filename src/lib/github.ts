@@ -27,19 +27,19 @@ export const projectGroups: ProjectGroup[] = [
   { title: "Chat apps", projects: ["chat", "chat-react"] },
   {
     title: "Utilities and developer tools",
-    projects: ["markdown-editor", "toolset", "base-convertion", "truth-table", "website-blocker", "utterances", "book-tracker", "book-tracker-app"],
+    projects: ["markdown-editor", "toolset", "base-convertion", "truth-table", "website-blocker", "utterances", "book-tracker", "book-tracker-app", "odd-even"],
   },
   { title: "Math and ML visualizers", projects: ["convolution-matrix", "confusion-matrix"] },
   {
     title: "IT Project 2023 group",
-    projects: ["itproject2023", "itproject2023-lunar", "lunar-assistant", "itproject2023-image", "itproject2023-qrcode", "itproject2023-weather", "itproject2023-editor", "itproject2023-paint", "itproject2023-quiz", "itproject2023-d-chat"],
+    projects: ["itproject2023", "itproject2023-lunar", "lunar-assistant", "itproject2023-assistant", "itproject2023-image", "itproject2023-qrcode", "itproject2023-weather", "itproject2023-editor", "itproject2023-paint", "itproject2023-quiz", "itproject2023-d-chat"],
   },
   { title: "Python and school projects", projects: ["computer-project", "com-project", "robot"] },
   {
     title: "Portfolio and personal sites",
-    projects: ["portfolio-payload", "sudharshans2009.github.io", "sudharshans2009", "bsoundharajan"],
+    projects: ["portfolio", "sudharshans2009.github.io", "sudharshans2009", "bsoundharajan"],
   },
-  { title: "Archived", projects: ["notion-blog-archived", "portfolio-archive-v1", "portfolio-archive-v2"] },
+  { title: "Archived", projects: ["portfolio-payload", "notion-blog", "notion-blog-archived", "portfolio-archive-v1", "portfolio-archive-v2"] },
   {
     title: "Forks",
     projects: ["RedditVideoMakerBot", "discord-dashboard-react", "links.madlad.store", "minecraft-server", "Minecraft-Server-on-Codespace", "massivedecks", "Presentation1", "IMAGE-TO-HTML-CSS", "HANDCRICKET-GAME"],
