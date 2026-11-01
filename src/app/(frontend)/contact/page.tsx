@@ -17,7 +17,7 @@ export default async function ContactPage() {
   if (!session) redirect("/user/sign-in");
 
   return (
-    <main className="mx-auto min-h-[720px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:min-h-[650px] max-md:py-20">
+    <main className="mx-auto min-h-[720px] w-full max-w-[1160px] px-4 py-28 max-md:min-h-[650px] max-md:py-20">
       <section className="max-w-[760px]">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">A good place to start</p>
         <h1 className="my-7 text-[clamp(3.5rem,9vw,8rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">Let&apos;s make something <em className="font-semibold not-italic text-primary">useful.</em></h1>

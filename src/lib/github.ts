@@ -1,7 +1,7 @@
 import { cache } from "react";
 
 export interface GitHubProject {
-  id: number;
+  id: number | string;
   name: string;
   description: string | null;
   html_url: string;

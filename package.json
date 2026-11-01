@@ -10,6 +10,7 @@
     "devsafe": "rm -rf .next && touch /tmp/ssme-localstorage && env NODE_OPTIONS='--no-deprecation --localstorage-file=/tmp/ssme-localstorage' next dev --turbopack",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:seed:projects": "bun scripts/seed-projects.ts",
     "lint": "eslint .",
     "test": "bun test",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"

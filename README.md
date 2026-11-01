@@ -35,6 +35,7 @@ learning, and thoughtful digital products.
    ```sh
    bun run db:generate
    bun run db:migrate
+   bun run db:seed:projects
    ```
 
 5. Start the development server:
@@ -47,6 +48,10 @@ The homepage and Projects page read public, non-fork GitHub repositories from
 `github.com/sudharshans2009` with one-hour revalidation. If GitHub is
 unavailable, the site renders an intentional empty state.
 
+The project seed imports the curated project list into PostgreSQL. Homepage
+cards are shown only for projects marked as featured in the admin workspace;
+unfeatured projects remain available on `/projects`.
+
 ## Site features
 
 - Responsive portfolio, About, Projects, and Contact pages
@@ -57,11 +62,15 @@ unavailable, the site renders an intentional empty state.
 - Profile name and private profile-image updates
 - Authenticated contact form backed by PostgreSQL
 - Contact confirmation and owner notification emails
+- Protected `/admin` workspace for users, messages, and project content
 - Basic in-process rate limiting and contact honeypot protection
 - Security response headers through the Next.js proxy
 
 The contact form requires an account. Contact messages are stored in the
 PostgreSQL `message` table and are not exposed through a public read endpoint.
+The permanent owner account is `sudharshans2009@gmail.com`; it can promote or
+demote other accounts, manage message deletion, and control project visibility
+and home-page highlights. The owner cannot be demoted.
 
 ## Production release
 

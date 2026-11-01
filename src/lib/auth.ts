@@ -6,9 +6,14 @@ import { Resend } from "resend";
 
 const configuredBaseURL =
   process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL;
-let baseURL = "https://sudharshans.me";
+const isDevelopment = process.env.NODE_ENV !== "production";
+const developmentOrigins =
+  !isDevelopment
+    ? []
+    : ["http://localhost:3000", "http://127.0.0.1:3000"];
+let baseURL = isDevelopment ? "http://localhost:3000" : "https://sudharshans.me";
 
-if (configuredBaseURL) {
+if (configuredBaseURL && !isDevelopment) {
   try {
     const parsedURL = new URL(configuredBaseURL);
     if (parsedURL.protocol === "https:") {
@@ -102,5 +107,6 @@ export const auth = betterAuth({
     baseURL,
     "https://sudharshans.me",
     "https://www.sudharshans.me",
+    ...developmentOrigins,
   ],
 });

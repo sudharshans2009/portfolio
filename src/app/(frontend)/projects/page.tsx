@@ -1,6 +1,7 @@
 import { Github } from "lucide-react";
 import { generateMetadata } from "@/lib/metadata";
-import { getGitHubProjects, groupProjects } from "@/lib/github";
+import { groupProjects } from "@/lib/github";
+import { getManagedProjects } from "@/lib/managed-projects";
 import { siteConfig } from "@/lib/site-config";
 import ProjectCard from "@/components/project-card";
 import ProjectsUnavailable from "@/components/projects-unavailable";
@@ -12,7 +13,7 @@ export const metadata = generateMetadata(
 );
 
 export default async function ProjectsPage() {
-  const projects = await getGitHubProjects();
+  const projects = await getManagedProjects();
   const groups = groupProjects(projects);
 
   return (

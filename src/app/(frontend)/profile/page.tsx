@@ -1,15 +1,19 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { getAdminSession } from "@/lib/admin";
 import ProfileForm from "./profile-form";
 import AccountSettings from "./account-settings";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, Settings, UserRound } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 
 export default async function ProfilePage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/user/sign-in");
+  const adminSession = await getAdminSession();
 
   return (
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
@@ -17,6 +21,7 @@ export default async function ProfilePage() {
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Your account</p>
         <h1 className="my-7 text-[clamp(3.5rem,9vw,7.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">Your space to <em className="font-semibold not-italic text-primary">personalize.</em></h1>
         <p className="max-w-[520px] text-[1.05rem] leading-6 text-muted-foreground">Manage your public profile details and the settings connected to your SS.me account.</p>
+        {adminSession && <Link href="/admin" className={`${buttonVariants({ variant: "outline", size: "sm" })} mt-6`}>Open admin workspace</Link>}
       </div>
       <Tabs defaultValue="profile" className="grid gap-8 lg:max-w-[820px]">
         <TabsList variant="line" className="h-auto w-full items-stretch justify-start gap-0 overflow-x-auto border-b border-border p-0">

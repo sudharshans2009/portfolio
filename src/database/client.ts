@@ -8,7 +8,7 @@ if (!connectionString) {
   throw new Error("POSTGRES_URL is not configured.");
 }
 
-const client = postgres(connectionString, {
+export const client = postgres(connectionString, {
   prepare: false,
 });
 

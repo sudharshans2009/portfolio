@@ -11,6 +11,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
+  role: text("role").notNull().default("user"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -58,5 +59,19 @@ export const message = pgTable("message", {
   body: text("body").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   read: boolean("read").notNull().default(false),
+  deletedAt: timestamp("deleted_at"),
 });
 
+export const project = pgTable("project", {
+  id: text("id").primaryKey(),
+  githubName: text("github_name").unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  url: text("url").notNull(),
+  language: text("language"),
+  topics: text("topics").array().notNull().default([]),
+  featured: boolean("featured").notNull().default(false),
+  visible: boolean("visible").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});

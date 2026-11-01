@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { getGitHubProjects } from "@/lib/github";
+import { getManagedProjects } from "@/lib/managed-projects";
 import { generateMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
 import ProjectCard from "@/components/project-card";
@@ -15,9 +15,10 @@ export const metadata = generateMetadata(
 );
 
 export default async function HomePage() {
-  const projects = (await getGitHubProjects()).filter(
+  const projects = (await getManagedProjects()).filter(
     (project) => !project.fork && !project.archived,
   );
+  const featuredProjects = projects.filter((project) => project.featured);
   const languages = [...new Set(
     projects
       .map((project) => project.language)
@@ -47,14 +48,14 @@ export default async function HomePage() {
           <h2 id="work-heading" className="m-0 text-[clamp(2.2rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">Things I&apos;ve been building.</h2>
           <p className="m-0 text-muted-foreground">Projects pulled from my public GitHub work, so this list stays current.</p>
         </div>
-        {projects.length > 0 ? (
+        {featuredProjects.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
-            {projects.slice(0, 4).map((project, index) => (
+            {featuredProjects.slice(0, 4).map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </div>
         ) : (
-          <p className="border-border border-y py-8 text-muted-foreground">Projects are taking a short break. Visit GitHub for the latest work.</p>
+          <p className="border-border border-y py-8 text-muted-foreground">Selected projects will appear here when they are highlighted.</p>
         )}
         <Link className="mt-7 inline-flex items-center gap-2 border border-foreground px-[18px] py-[13px] text-xs font-semibold transition-colors hover:bg-foreground hover:text-background" href="/projects">
           See all projects <ArrowUpRight size={16} aria-hidden="true" />

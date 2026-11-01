@@ -33,7 +33,7 @@ export default function ContactForm({
   }, [state]);
 
   return (
-    <form className="grid gap-5 border-border border-b px-0 py-7 pb-10" action={formAction}>
+    <form className="grid min-w-0 gap-5 border-border border-b px-0 py-7 pb-10" action={formAction}>
       <Label className="w-full flex-col items-start gap-2">
         Name
         <Input name="name" defaultValue={name} required maxLength={80} autoComplete="name" />

@@ -8,6 +8,13 @@
       "when": 1793510333781,
       "tag": "0000_lovely_lyja",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793527499418,
+      "tag": "0001_abandoned_elektra",
+      "breakpoints": true
     }
   ]
 }
