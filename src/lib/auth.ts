@@ -4,11 +4,23 @@ import { db } from "@/database/client";
 import * as schema from "@/database/schema";
 import { Resend } from "resend";
 
+const configuredBaseURL =
+  process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL;
+let baseURL = "https://sudharshans.me";
+
+if (configuredBaseURL) {
+  try {
+    const parsedURL = new URL(configuredBaseURL);
+    if (parsedURL.protocol === "https:") {
+      baseURL = parsedURL.origin;
+    }
+  } catch {
+    console.error("Invalid Better Auth base URL configuration.");
+  }
+}
+
 export const auth = betterAuth({
-  baseURL:
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://sudharshans.me",
+  baseURL,
   secret: process.env.BETTER_AUTH_SECRET || "ssme-local-development-secret-change-me",
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -86,5 +98,5 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [process.env.NEXT_PUBLIC_SITE_URL || "https://sudharshans.me"],
+  trustedOrigins: [baseURL],
 });
