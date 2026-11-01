@@ -30,9 +30,9 @@ export default async function HomePage() {
       <section className="mx-auto flex min-h-[680px] w-[min(1160px,calc(100%-2rem))] flex-col justify-center py-24 max-md:min-h-[590px] max-md:py-20">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Independent developer · {siteConfig.location}</p>
         <h1 className="my-7 mb-11 max-w-[1000px] text-[clamp(4rem,11vw,9.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,15vw,5rem)]">
-          Coding projects,
+          Ideas into
           <br />
-          <em className="font-semibold not-italic text-primary">carefully made.</em>
+          <em className="font-semibold not-italic text-primary">useful software.</em>
         </h1>
         <div className="flex items-end justify-between gap-8 border-border border-t pt-6 max-md:flex-col max-md:items-start">
           <p className="m-0 max-w-[440px] text-[1.05rem] leading-6 text-muted-foreground">{siteConfig.positioning}</p>
