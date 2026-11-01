@@ -91,6 +91,28 @@ export default function ProfileForm() {
     });
   }
 
+  async function removeImage() {
+    setPending(true);
+    const result = await authClient.updateUser({ image: null });
+    setPending(false);
+    if (result.error) {
+      toast.add({
+        type: "error",
+        title: "Profile image removal failed",
+        description: result.error.message || "Profile image could not be removed.",
+      });
+      return;
+    }
+
+    await authClient.getSession();
+    setImageUrl("");
+    toast.add({
+      type: "success",
+      title: "Profile image removed",
+      description: "Your profile now uses your initials.",
+    });
+  }
+
   return (
     <form className="grid gap-5" onSubmit={saveProfile}>
       <div className="flex items-center gap-5 border-b border-border pb-6">
@@ -98,7 +120,7 @@ export default function ProfileForm() {
           className="profile-avatar group relative grid size-24 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-muted"
           htmlFor="profile-image-upload"
         >
-          <Avatar className="profile-avatar size-full rounded-full bg-muted transition-colors group-hover:bg-muted/80" size="lg">
+          <Avatar className="profile-avatar !size-full rounded-full bg-muted transition-colors group-hover:bg-muted/80" size="lg">
             <AvatarImage src={imageUrl} alt="" />
             <AvatarFallback className="bg-muted text-3xl font-semibold text-primary">
               {name.trim().slice(0, 1).toUpperCase() || <Camera size={24} aria-hidden="true" />}
@@ -123,6 +145,18 @@ export default function ProfileForm() {
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
             Upload a square JPG, PNG, or WebP up to 5 MB.
           </p>
+          {imageUrl && (
+            <Button
+              type="button"
+              variant="link"
+              size="sm"
+              className="mt-2 h-auto px-0 text-destructive"
+              onClick={removeImage}
+              disabled={pending}
+            >
+              Remove image
+            </Button>
+          )}
         </div>
       </div>
       <Label className="w-full flex-col items-start gap-2">
