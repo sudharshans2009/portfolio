@@ -94,7 +94,7 @@ export default function ProfileForm() {
   return (
     <form className="grid gap-5" onSubmit={saveProfile}>
       <div className="flex items-center gap-5 border-b border-border pb-6">
-        <label
+        <Label
           className="profile-avatar group relative grid size-24 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-muted"
           htmlFor="profile-image-upload"
         >
@@ -117,7 +117,7 @@ export default function ProfileForm() {
             onChange={uploadImage}
             disabled={pending}
           />
-        </label>
+        </Label>
         <div>
           <p className="text-sm font-semibold">Profile image</p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">

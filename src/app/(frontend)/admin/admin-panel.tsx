@@ -13,6 +13,8 @@ import { toast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 type AdminAction = (
   state: AdminActionState,
@@ -26,11 +28,13 @@ function ActionForm({
   hidden,
   children,
   submitLabel = "Save",
+  variant = "default",
 }: {
   action: AdminAction;
   hidden: Record<string, string>;
   children?: React.ReactNode;
   submitLabel?: string;
+  variant?: "default" | "destructive";
 }) {
   const [state, formAction, pending] = useActionState(action, initialState);
 
@@ -48,7 +52,7 @@ function ActionForm({
     <form action={formAction} className="flex flex-wrap items-center gap-2">
       {Object.entries(hidden).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
       {children}
-      {!children && <Button type="submit" size="sm" disabled={pending}>{pending ? "Saving…" : submitLabel}</Button>}
+      <Button type="submit" size="sm" variant={variant} disabled={pending}>{pending ? "Saving…" : submitLabel}</Button>
     </form>
   );
 }
@@ -138,7 +142,7 @@ export default function AdminPanel({
                   <p className="whitespace-pre-wrap text-sm leading-6">{item.body}</p>
                   <div className="flex flex-wrap gap-2">
                     {!item.read && <ActionForm action={updateMessage} hidden={{ id: item.id, action: "read" }} submitLabel="Mark as read" />}
-                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "trash" }}><Button type="submit" size="sm" variant="destructive">Move to deleted</Button></ActionForm>
+                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "trash" }} submitLabel="Move to deleted" variant="destructive" />
                   </div>
                 </article>
               ))}
@@ -151,8 +155,8 @@ export default function AdminPanel({
                   <div><p className="font-semibold">{item.name}</p><p className="break-all text-sm text-muted-foreground">{item.email}</p></div>
                   <p className="whitespace-pre-wrap text-sm leading-6">{item.body}</p>
                   <div className="flex flex-wrap gap-2">
-                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "restore" }} />
-                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "delete" }}><Button type="submit" size="sm" variant="destructive">Delete permanently</Button></ActionForm>
+                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "restore" }} submitLabel="Restore" />
+                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "delete" }} submitLabel="Delete permanently" variant="destructive" />
                   </div>
                 </article>
               ))}
@@ -206,8 +210,14 @@ function ProjectEditor({ project: item }: { project: {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-mono text-xs uppercase text-muted-foreground">{item.githubName ? `GitHub · ${item.githubName}` : "Custom project"}</p>
         <div className="flex gap-4 text-sm">
-          <label className="flex items-center gap-2"><input type="checkbox" name="visible" defaultChecked={item.visible} /> Visible</label>
-          <label className="flex items-center gap-2"><input type="checkbox" name="featured" defaultChecked={item.featured} /> Highlight</label>
+          <Label className="flex items-center gap-2">
+            <Checkbox name="visible" defaultChecked={item.visible} value="on" />
+            Visible
+          </Label>
+          <Label className="flex items-center gap-2">
+            <Checkbox name="featured" defaultChecked={item.featured} value="on" />
+            Highlight
+          </Label>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
@@ -219,7 +229,7 @@ function ProjectEditor({ project: item }: { project: {
       <Textarea name="description" defaultValue={item.description ?? ""} placeholder="Description" rows={3} />
       <div className="flex flex-wrap gap-2">
         <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save project"}</Button>
-        {item.isCustom && <ActionForm action={deleteProject} hidden={{ id: item.id }}><Button type="submit" variant="destructive">Delete project</Button></ActionForm>}
+        {item.isCustom && <ActionForm action={deleteProject} hidden={{ id: item.id }} submitLabel="Delete project" variant="destructive" />}
       </div>
     </form>
   );

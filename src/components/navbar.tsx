@@ -6,6 +6,7 @@ import { useState } from "react";
 import { navigation, siteConfig } from "@/lib/site-config";
 import { authClient } from "@/lib/auth-client";
 import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
@@ -37,16 +38,18 @@ export default function Navbar() {
           <Link href={session?.user ? "/profile" : "/user/sign-in"} className={buttonVariants({ variant: "outline", size: "sm", className: "login-link" })}>
             {isPending ? "Login" : session?.user ? "Profile" : "Login"}
           </Link>
-          <button
+          <Button
             type="button"
-            className="hidden size-9 place-items-center border border-border max-md:grid"
+            variant="outline"
+            size="icon"
+            className="hidden max-md:grid"
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             onClick={() => setMenuOpen((open) => !open)}
           >
             {menuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-          </button>
+          </Button>
         </div>
       </div>
       {menuOpen && (
