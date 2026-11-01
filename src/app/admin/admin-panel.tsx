@@ -1,12 +1,14 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import Link from "next/link";
 import { OWNER_EMAIL } from "@/lib/admin-constants";
 import {
   deleteProject,
+  deleteUser,
   saveProject,
+  updateUser,
   updateMessage,
-  updateUserRole,
   type AdminActionState,
 } from "./actions";
 import { toast } from "@/components/ui/toast";
@@ -15,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { cn } from "cn";
 import DataTable, { type DataTableColumn } from "@/components/ui/data-table";
 import {
   Dialog,
@@ -38,12 +41,14 @@ function ActionForm({
   children,
   submitLabel = "Save",
   variant = "default",
+  className,
 }: {
   action: AdminAction;
   hidden: Record<string, string>;
   children?: React.ReactNode;
   submitLabel?: string;
   variant?: "default" | "destructive";
+  className?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, initialState);
 
@@ -58,7 +63,7 @@ function ActionForm({
   }, [state]);
 
   return (
-    <form action={formAction} className="flex flex-wrap items-center gap-2">
+    <form action={formAction} className={cn("flex flex-wrap items-center gap-2", className)}>
       {Object.entries(hidden).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
       {children}
       <Button type="submit" size="sm" variant={variant} disabled={pending}>{pending ? "Saving…" : submitLabel}</Button>
@@ -81,12 +86,10 @@ function Section({ title, count, children }: { title: string; count: number; chi
 export default function AdminPanel({
   users,
   activeMessages,
-  deletedMessages,
   projects,
 }: {
   users: Array<{ id: string; name: string; email: string; role: string; createdAt: Date }>;
   activeMessages: Array<{ id: string; name: string; email: string; body: string; createdAt: Date; read: boolean }>;
-  deletedMessages: Array<{ id: string; name: string; email: string; body: string; createdAt: Date; read: boolean; deletedAt: Date | null }>;
   projects: Array<{
     id: string;
     githubName?: string | null;
@@ -121,7 +124,7 @@ export default function AdminPanel({
         <div className="grid gap-12">
           <Section title="Messages" count={activeMessages.length}>
             <div className="grid gap-4">
-              {activeMessages.map((item) => (
+              {activeMessages.length > 0 ? activeMessages.map((item) => (
                 <article key={item.id} className={`grid gap-4 border p-5 ${item.read ? "border-border" : "border-primary"}`}>
                   <div className="flex flex-wrap justify-between gap-3">
                     <div><p className="font-semibold">{item.name}</p><p className="break-all text-sm text-muted-foreground">{item.email}</p></div>
@@ -133,23 +136,12 @@ export default function AdminPanel({
                     <ActionForm action={updateMessage} hidden={{ id: item.id, action: "trash" }} submitLabel="Move to deleted" variant="destructive" />
                   </div>
                 </article>
-              ))}
+              )) : <p className="text-sm text-muted-foreground">No messages found.</p>}
             </div>
           </Section>
-          <Section title="Deleted messages" count={deletedMessages.length}>
-            <div className="grid gap-4">
-              {deletedMessages.map((item) => (
-                <article key={item.id} className="grid gap-4 border border-border p-5">
-                  <div><p className="font-semibold">{item.name}</p><p className="break-all text-sm text-muted-foreground">{item.email}</p></div>
-                  <p className="whitespace-pre-wrap text-sm leading-6">{item.body}</p>
-                  <div className="flex flex-wrap gap-2">
-                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "restore" }} submitLabel="Restore" />
-                    <ActionForm action={updateMessage} hidden={{ id: item.id, action: "delete" }} submitLabel="Delete permanently" variant="destructive" />
-                  </div>
-                </article>
-              ))}
-            </div>
-          </Section>
+          <Link href="/admin/messages/deleted" className="inline-flex w-fit items-center border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted">
+            View deleted messages
+          </Link>
         </div>
       )}
 
@@ -171,36 +163,47 @@ function UserTable({ users }: { users: Array<{ id: string; name: string; email: 
       header: "Actions",
       cell: (item) => item.email.toLowerCase() === OWNER_EMAIL
         ? <span className="font-mono text-xs uppercase text-primary">Permanent owner</span>
-        : <UserRoleDialog user={item} />,
+        : <UserActionsDialog user={item} />,
     },
   ];
   return <DataTable data={users} columns={columns} emptyMessage="No users found." placeholder="Search users…" />;
 }
 
-function UserRoleDialog({ user }: { user: { id: string; name: string; email: string; role: string } }) {
+function UserActionsDialog({ user }: { user: { id: string; name: string; email: string; role: string } }) {
   const [open, setOpen] = useState(false);
-  const [state, formAction, pending] = useActionState(updateUserRole, initialState);
+  const [state, formAction, pending] = useActionState(updateUser, initialState);
+  const [deleteState, deleteFormAction, deletePending] = useActionState(deleteUser, initialState);
   useEffect(() => {
-    if (state.success) setOpen(false);
+    if (state.success || deleteState.success) setOpen(false);
     if (state.message) toast.add({ type: state.success ? "success" : "error", title: state.success ? "User updated" : "Update failed", description: state.message });
-  }, [state]);
-  const nextRole = user.role === "admin" ? "user" : "admin";
+    if (deleteState.message) toast.add({ type: deleteState.success ? "success" : "error", title: deleteState.success ? "User deleted" : "Delete failed", description: deleteState.message });
+  }, [deleteState, state]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button type="button" size="sm" variant="outline" onClick={() => setOpen(true)}>Edit role</Button>
-      <DialogContent>
+      <Button type="button" size="sm" variant="outline" onClick={() => setOpen(true)}>Manage</Button>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Update user role</DialogTitle>
+          <DialogTitle>Manage user</DialogTitle>
           <DialogDescription>{user.name || user.email}</DialogDescription>
         </DialogHeader>
         <form action={formAction} className="grid gap-4">
-          <input type="hidden" name="userId" value={user.id} />
-          <input type="hidden" name="role" value={nextRole} />
-          <p className="text-sm text-muted-foreground">Change this user from <strong>{user.role}</strong> to <strong>{nextRole}</strong>?</p>
+          <input type="hidden" name="id" value={user.id} />
+          <Label className="w-full flex-col items-start gap-2">Name<Input name="name" defaultValue={user.name} required /></Label>
+          <Label className="w-full flex-col items-start gap-2">Email<Input name="email" type="email" defaultValue={user.email} required /></Label>
+          <Label className="w-full flex-col items-start gap-2">Role
+            <select name="role" defaultValue={user.role} className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </Label>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Update role"}</Button>
+            <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save changes"}</Button>
           </DialogFooter>
+        </form>
+        <form action={deleteFormAction} className="border-t border-border pt-4">
+          <input type="hidden" name="id" value={user.id} />
+          <Button type="submit" variant="destructive" disabled={deletePending}>{deletePending ? "Deleting…" : "Delete user"}</Button>
         </form>
       </DialogContent>
     </Dialog>
@@ -238,13 +241,13 @@ function ProjectDialog({ project: item }: { project?: {
   const project = item || { id: "", githubName: null, name: "", description: "", url: "https://", language: "", topics: [], featured: false, visible: true, isCustom: false };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button type="button" size="sm" variant={item ? "outline" : "default"} onClick={() => setOpen(true)}>{item ? "Edit" : "Add custom project"}</Button>
-      <DialogContent className="max-w-2xl">
+      <Button type="button" size="sm" variant={item ? "outline" : "default"} onClick={() => setOpen(true)}>{item ? "Edit" : "Add project"}</Button>
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{item ? "Edit project" : "Add custom project"}</DialogTitle>
+          <DialogTitle>{item ? "Edit project" : "Add project"}</DialogTitle>
           <DialogDescription>{item?.githubName ? `GitHub · ${item.githubName}` : "Project details and visibility."}</DialogDescription>
         </DialogHeader>
-        <form action={formAction} className="grid gap-4">
+        <form id={`project-form-${project.id || "new"}`} action={formAction} className="grid gap-4">
           <input type="hidden" name="id" value={project.id} />
           {project.githubName && <input type="hidden" name="githubName" value={project.githubName} />}
           <div className="grid gap-4 md:grid-cols-2">
@@ -258,19 +261,31 @@ function ProjectDialog({ project: item }: { project?: {
             <Label className="flex items-center gap-2"><Checkbox name="visible" defaultChecked={project.visible} value="on" />Visible</Label>
             <Label className="flex items-center gap-2"><Checkbox name="featured" defaultChecked={project.featured} value="on" />Highlight</Label>
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save project"}</Button>
-          </DialogFooter>
         </form>
-        {project.isCustom && (
-          <ActionForm
-            action={deleteProject}
-            hidden={{ id: project.id }}
-            submitLabel="Delete project"
-            variant="destructive"
-          />
-        )}
+        <DialogFooter className="flex-row items-center justify-between">
+          {item ? (
+            <ActionForm
+              action={deleteProject}
+              className="mr-auto"
+              hidden={{
+                id: project.id,
+                ...(project.githubName ? {
+                  githubName: project.githubName,
+                  name: project.name,
+                  description: project.description ?? "",
+                  url: project.url,
+                  language: project.language ?? "",
+                } : {}),
+              }}
+              submitLabel="Delete project"
+              variant="destructive"
+            />
+          ) : <span />}
+          <div className="flex gap-2">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" form={`project-form-${project.id || "new"}`} disabled={pending}>{pending ? "Saving…" : "Save project"}</Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

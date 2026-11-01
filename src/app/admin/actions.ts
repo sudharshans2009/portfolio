@@ -35,6 +35,64 @@ export async function updateUserRole(
   }
 }
 
+const userSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(1).max(120),
+  email: z.string().trim().email().max(254),
+  role: z.enum(["admin", "user"]),
+});
+
+export async function updateUser(
+  _previous: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  try {
+    await requireAdmin();
+    const parsed = userSchema.parse({
+      id: formData.get("id"),
+      name: formData.get("name"),
+      email: formData.get("email"),
+      role: formData.get("role"),
+    });
+    const [target] = await db.select({ email: user.email }).from(user).where(eq(user.id, parsed.id)).limit(1);
+    if (!target) return { success: false, message: "User not found." };
+    if (target.email.toLowerCase() === OWNER_EMAIL) {
+      return { success: false, message: "The permanent owner cannot be edited." };
+    }
+    await db.update(user).set({
+      name: parsed.name,
+      email: parsed.email,
+      role: parsed.role,
+      emailVerified: false,
+      updatedAt: new Date(),
+    }).where(eq(user.id, parsed.id));
+    revalidatePath("/admin");
+    return { success: true, message: "User updated." };
+  } catch (error) {
+    return failed(error);
+  }
+}
+
+export async function deleteUser(
+  _previous: AdminActionState,
+  formData: FormData,
+): Promise<AdminActionState> {
+  try {
+    await requireAdmin();
+    const id = z.string().min(1).parse(formData.get("id"));
+    const [target] = await db.select({ email: user.email }).from(user).where(eq(user.id, id)).limit(1);
+    if (!target) return { success: false, message: "User not found." };
+    if (target.email.toLowerCase() === OWNER_EMAIL) {
+      return { success: false, message: "The permanent owner cannot be deleted." };
+    }
+    await db.delete(user).where(eq(user.id, id));
+    revalidatePath("/admin");
+    return { success: true, message: "User deleted." };
+  } catch (error) {
+    return failed(error);
+  }
+}
+
 export async function updateMessage(
   _previous: AdminActionState,
   formData: FormData,
@@ -122,7 +180,27 @@ export async function deleteProject(
   try {
     await requireAdmin();
     const id = z.string().min(1).parse(formData.get("id"));
-    await db.delete(project).where(eq(project.id, id));
+    const githubName = z.string().trim().max(120).optional().parse(formData.get("githubName") || undefined);
+    if (githubName) {
+      const [existing] = await db.select({ id: project.id }).from(project).where(eq(project.githubName, githubName)).limit(1);
+      if (existing) {
+        await db.update(project).set({ visible: false, featured: false, updatedAt: new Date() }).where(eq(project.id, existing.id));
+      } else {
+        await db.insert(project).values({
+          id: crypto.randomUUID(),
+          githubName,
+          name: z.string().min(1).parse(formData.get("name")),
+          description: z.string().max(500).nullable().parse(formData.get("description") || null),
+          url: z.string().url().parse(formData.get("url")),
+          language: z.string().max(80).nullable().parse(formData.get("language") || null),
+          topics: [],
+          featured: false,
+          visible: false,
+        });
+      }
+    } else {
+      await db.delete(project).where(eq(project.id, id));
+    }
     revalidatePath("/");
     revalidatePath("/projects");
     revalidatePath("/about");
@@ -142,4 +220,9 @@ export async function getAdminData() {
     db.select().from(message).where(isNotNull(message.deletedAt)),
   ]);
   return { users, activeMessages, deletedMessages };
+}
+
+export async function getDeletedMessages() {
+  await requireAdmin();
+  return db.select().from(message).where(isNotNull(message.deletedAt));
 }

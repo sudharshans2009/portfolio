@@ -49,6 +49,7 @@ export default function DataTable<T>({
           onChange={(event) => setFilter(event.target.value)}
           placeholder={placeholder}
           className="pl-9"
+          style={{ paddingLeft: "2.25rem" }}
           aria-label={placeholder}
         />
       </div>

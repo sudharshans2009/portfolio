@@ -15,7 +15,7 @@ export default async function AdminPage() {
   const session = await getAdminSession();
   if (!session) redirect("/user/sign-in");
 
-  const [{ users, activeMessages, deletedMessages }, projects] = await Promise.all([
+  const [{ users, activeMessages }, projects] = await Promise.all([
     getAdminData(),
     getAdminProjects(),
   ]);
@@ -28,7 +28,7 @@ export default async function AdminPage() {
           Keep things <em className="font-semibold not-italic text-primary">useful.</em>
         </h1>
       </header>
-      <AdminPanel users={users} activeMessages={activeMessages} deletedMessages={deletedMessages} projects={projects} />
+      <AdminPanel users={users} activeMessages={activeMessages} projects={projects} />
     </main>
   );
 }
