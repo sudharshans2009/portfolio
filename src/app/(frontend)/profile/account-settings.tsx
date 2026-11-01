@@ -21,6 +21,7 @@ export default function AccountSettings({
   const router = useRouter();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [newEmail, setNewEmail] = useState("");
   const [pending, setPending] = useState(false);
 
   async function signOut() {
@@ -53,6 +54,32 @@ export default function AccountSettings({
       type: "success",
       title: "Password changed",
       description: "Your password has been updated and other sessions were signed out.",
+    });
+  }
+
+  async function changeEmail(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPending(true);
+    const result = await authClient.changeEmail({
+      newEmail: newEmail.trim(),
+      callbackURL: "/profile",
+    });
+    setPending(false);
+
+    if (result.error) {
+      toast.add({
+        type: "error",
+        title: "Email change failed",
+        description: result.error.message || "Your email could not be changed.",
+      });
+      return;
+    }
+
+    setNewEmail("");
+    toast.add({
+      type: "success",
+      title: "Confirm your new email",
+      description: "We sent a confirmation link to your new email address.",
     });
   }
 

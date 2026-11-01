@@ -36,17 +36,25 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
-    sendVerificationEmail: async ({ user, url, newEmail }) => {
+    sendVerificationEmail: async (data) => {
       const apiKey = process.env.RESEND_API_KEY;
       if (!apiKey) {
         throw new Error("RESEND_API_KEY is not configured.");
       }
 
+      const { user, url } = data;
+      const recipient =
+        "newEmail" in data && typeof data.newEmail === "string"
+          ? data.newEmail
+          : user.email;
       const resend = new Resend(apiKey);
       const result = await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
-        to: newEmail || user.email,
-        subject: newEmail ? "Confirm your new SS.me email" : "Verify your SS.me email",
+        to: recipient,
+        subject:
+          "newEmail" in data
+            ? "Confirm your new SS.me email"
+            : "Verify your SS.me email",
         text: `Hi ${user.name || "there"},\n\nConfirm your email address here:\n${url}\n\nIf you did not request this, you can ignore this email.`,
       });
 
@@ -58,7 +66,24 @@ export const auth = betterAuth({
   user: {
     changeEmail: {
       enabled: true,
-      sendChangeEmailConfirmation: true,
+      sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+        const apiKey = process.env.RESEND_API_KEY;
+        if (!apiKey) {
+          throw new Error("RESEND_API_KEY is not configured.");
+        }
+
+        const resend = new Resend(apiKey);
+        const result = await resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+          to: newEmail,
+          subject: "Confirm your new SS.me email",
+          text: `Hi ${user.name || "there"},\n\nConfirm your new email address here:\n${url}\n\nIf you did not request this, you can ignore this email.`,
+        });
+
+        if (result.error) {
+          throw new Error(result.error.message);
+        }
+      },
     },
   },
   trustedOrigins: [process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"],
