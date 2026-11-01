@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import AboutProjectSummary from "@/components/about-project-summary";
 
 export const metadata = generateMetadata(
-  "About Sudharshan — SS.me",
+  "About - SS.me",
   "About Sudharshan S, a student at Amrita Vidyalayam, Coimbatore, who builds coding projects.",
   "/about",
 );
@@ -39,7 +39,7 @@ export default async function AboutPage() {
   return (
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
       <header className="mb-[72px] max-w-[760px]">
-        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 — About</p>
+        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 - About</p>
         <h1 className="my-7 text-[clamp(4rem,10vw,8rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,15vw,5rem)]">A student who <em className="font-semibold not-italic text-primary">builds.</em></h1>
       </header>
       <div className="ml-[33.333%] max-w-[650px] space-y-6 text-[1.15rem] leading-7 text-muted-foreground max-md:ml-0">
@@ -69,7 +69,7 @@ export default async function AboutPage() {
       <section className="mt-32 border-t border-border pt-10 max-md:mt-24" aria-labelledby="how-i-work-heading">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_2fr]">
           <div>
-            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">03 — How I work</p>
+            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">03 - How I work</p>
             <h2 id="how-i-work-heading" className="mt-5 max-w-[360px] text-[clamp(2.2rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">
               Learning by <em className="font-semibold not-italic text-primary">making.</em>
             </h2>
@@ -99,7 +99,7 @@ export default async function AboutPage() {
 
       <section className="mt-24 grid gap-8 border-t border-border pt-10 md:grid-cols-[minmax(0,1fr)_2fr] max-md:mt-16" aria-labelledby="currently-learning-heading">
         <div>
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">04 — Currently learning</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">04 - Currently learning</p>
           <h2 id="currently-learning-heading" className="mt-5 max-w-[360px] text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[.95] tracking-[-.07em]">
             Keep moving <em className="font-semibold not-italic text-primary">forward.</em>
           </h2>
@@ -121,7 +121,7 @@ export default async function AboutPage() {
       <section className="mt-24 border-t border-border pt-10 max-md:mt-16" aria-labelledby="project-summary-heading">
         <div className="mb-7 flex items-end justify-between gap-6 max-md:flex-col max-md:items-start">
           <div>
-            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">05 — Project summary</p>
+            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">05 - Project summary</p>
             <h2 id="project-summary-heading" className="mt-5 text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[.95] tracking-[-.07em]">
               A living <em className="font-semibold not-italic text-primary">workbench.</em>
             </h2>

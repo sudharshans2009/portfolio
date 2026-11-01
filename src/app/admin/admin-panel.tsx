@@ -216,7 +216,7 @@ function ProjectTable({ projects }: { projects: Array<{
 }> }) {
   const columns: DataTableColumn<typeof projects[number]>[] = [
     { header: "Project", cell: (item) => <span className="font-medium">{item.name}</span>, searchable: (item) => `${item.name} ${item.githubName || ""}` },
-    { header: "Language", cell: (item) => item.language || "—", searchable: (item) => item.language || "" },
+    { header: "Language", cell: (item) => item.language || "-", searchable: (item) => item.language || "" },
     { header: "Status", cell: (item) => <span className="font-mono text-xs uppercase">{item.visible ? "Visible" : "Hidden"}{item.featured ? " · Featured" : ""}</span>, searchable: (item) => `${item.visible} ${item.featured}` },
     { header: "Actions", cell: (item) => <ProjectDialog project={item} /> },
   ];

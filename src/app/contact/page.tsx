@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 import ContactForm from "./contact-form";
 
 export const metadata = generateMetadata(
-  "Contact Sudharshan S",
+  "Contact - SS.me",
   "Contact Sudharshan about coding projects, ideas, and collaborations.",
   "/contact",
 );

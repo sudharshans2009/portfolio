@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/site-config";
 export default function NotFound() {
   return (
     <main className="mx-auto flex min-h-[760px] w-[min(1160px,calc(100%-2rem))] flex-col justify-center py-28 max-md:py-20">
-      <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">404 — Page not found</p>
+      <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">404 - Page not found</p>
       <h1 className="my-7 mb-11 text-[clamp(4rem,11vw,9.5rem)] font-medium leading-[.95] tracking-[-.09em]">
         This page
         <br />

@@ -6,7 +6,7 @@ import { getDeletedMessages } from "@/app/admin/actions";
 import DeletedMessagesPanel from "@/components/deleted-messages-panel";
 
 export const metadata = generateMetadata(
-  "Deleted messages — Admin — SS.me",
+  "Deleted Messages - Admin - SS.me",
   "Review and restore deleted SS.me messages.",
   "/admin/messages/deleted",
 );

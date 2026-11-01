@@ -6,7 +6,7 @@ import { getAdminProjects } from "@/lib/managed-projects";
 import AdminPanel from "./admin-panel";
 
 export const metadata = generateMetadata(
-  "Admin — SS.me",
+  "Admin - SS.me",
   "Manage SS.me users, messages, and projects.",
   "/admin",
 );

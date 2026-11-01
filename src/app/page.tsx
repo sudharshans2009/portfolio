@@ -39,7 +39,7 @@ export default async function HomePage() {
 
       <section id="work" className="mx-auto w-[min(1160px,calc(100%-2rem))] py-32 max-md:py-20" aria-labelledby="work-heading">
         <div className="mb-13 flex flex-col items-start gap-[18px]">
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">01 — Selected work</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">01 - Selected work</p>
           <h2 id="work-heading" className="m-0 text-[clamp(2.2rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">Things I&apos;ve been building.</h2>
           <p className="m-0 text-muted-foreground">Projects pulled from my public GitHub work, so this list stays current.</p>
         </div>
@@ -49,7 +49,7 @@ export default async function HomePage() {
       <section className="mx-auto w-[min(1160px,calc(100%-2rem))] border-t border-border py-28 max-md:py-20" aria-labelledby="snapshot-heading">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_2fr]">
           <div>
-            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 — A small snapshot</p>
+            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 - A small snapshot</p>
             <h2 id="snapshot-heading" className="mt-6 max-w-[390px] text-[clamp(2.4rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">
               Curious, practical, <em className="font-semibold not-italic text-primary">always learning.</em>
             </h2>
@@ -70,7 +70,7 @@ export default async function HomePage() {
       <section className="mx-auto w-[min(1160px,calc(100%-2rem))] border-t border-border py-28 max-md:py-20" aria-labelledby="process-heading">
         <div className="mb-10 flex items-end justify-between gap-6 max-md:flex-col max-md:items-start">
           <div>
-            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">03 — How I build</p>
+            <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">03 - How I build</p>
             <h2 id="process-heading" className="mt-6 text-[clamp(2.4rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">
               From idea to <em className="font-semibold not-italic text-primary">working project.</em>
             </h2>
@@ -106,7 +106,7 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto w-[min(1160px,calc(100%-2rem))] border-t border-border py-36 max-md:py-24" aria-labelledby="contact-heading">
-        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 — Start a conversation</p>
+        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 - Start a conversation</p>
         <h2 id="contact-heading" className="my-7 mb-11 max-w-[680px] text-[clamp(2.2rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">Want to talk code?</h2>
         <Link className="inline-flex items-center gap-2 bg-primary px-5 py-4 text-sm font-bold text-primary-foreground" href="/contact">Say hello <ArrowUpRight size={20} aria-hidden="true" /></Link>
       </section>

@@ -3,7 +3,7 @@ import AuthForm from "@/components/auth-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata = generateMetadata(
-  "Login — SS.me",
+  "Login - SS.me",
   "Login to your SS.me account.",
   "/user/sign-in",
 );

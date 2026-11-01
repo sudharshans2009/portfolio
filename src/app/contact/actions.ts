@@ -42,7 +42,7 @@ export async function submitContact(
   }
 
   if (parsed.data.website) {
-    return { success: true, message: "Thanks — your message is on its way." };
+    return { success: true, message: "Thanks - your message is on its way." };
   }
 
   try {
@@ -93,7 +93,7 @@ export async function submitContact(
       };
     }
 
-    return { success: true, message: "Thanks — your message is on its way." };
+    return { success: true, message: "Thanks - your message is on its way." };
   } catch (error) {
     console.error("Contact email delivery failed", error);
     return {

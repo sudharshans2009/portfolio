@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "SS.me",
-  title: "Sudharshan S — coding projects",
+  title: "Home - SS.me",
   description:
     "I am a high school student in India who builds coding projects with TypeScript, JavaScript, and Python.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://sudharshans.me",
