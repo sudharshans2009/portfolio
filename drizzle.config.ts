@@ -8,6 +8,6 @@ export default defineConfig({
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL || "postgres://localhost/ssme",
+    url: process.env.POSTGRES_URL || "postgres://localhost/ssme",
   },
 });

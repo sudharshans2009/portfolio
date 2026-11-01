@@ -14,7 +14,7 @@ digital products at the intersection of design and engineering.
 
 ## Local development
 
-1. Copy `.env.example` to `.env` and set `DATABASE_URL`.
+1. Copy `.env.example` to `.env` and set `POSTGRES_URL`.
 2. Install dependencies with `bun install`.
 3. Generate and apply the database schema:
 
@@ -31,7 +31,7 @@ an intentional empty state rather than failing the request.
 
 ## Production
 
-Set `NEXT_PUBLIC_SITE_URL`, `DATABASE_URL`, and `BETTER_AUTH_SECRET` in Vercel.
+Set `NEXT_PUBLIC_SITE_URL`, `POSTGRES_URL`, and `BETTER_AUTH_SECRET` in Vercel.
 Use a managed PostgreSQL provider and run generated Drizzle migrations during
 deployment. The canonical site URL is `https://sudharshans.me`; set that value
 for production.
