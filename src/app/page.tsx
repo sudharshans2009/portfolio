@@ -3,7 +3,8 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { getManagedProjects } from "@/lib/managed-projects";
 import { generateMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
-import ProjectCard from "@/components/project-card";
+import FeaturedProjects from "@/components/featured-projects";
+import ProjectHighlights from "@/components/project-highlights";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -13,17 +14,11 @@ export const metadata = generateMetadata(
   siteConfig.description,
   "/",
 );
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export default async function HomePage() {
-  const projects = (await getManagedProjects()).filter(
-    (project) => !project.fork && !project.archived,
-  );
-  const featuredProjects = projects.filter((project) => project.featured);
-  const languages = [...new Set(
-    projects
-      .map((project) => project.language)
-      .filter((language): language is string => Boolean(language)),
-  )];
+  const projects = await getManagedProjects();
 
   return (
     <main>
@@ -48,18 +43,7 @@ export default async function HomePage() {
           <h2 id="work-heading" className="m-0 text-[clamp(2.2rem,5vw,4.5rem)] font-medium leading-[.95] tracking-[-.07em]">Things I&apos;ve been building.</h2>
           <p className="m-0 text-muted-foreground">Projects pulled from my public GitHub work, so this list stays current.</p>
         </div>
-        {featuredProjects.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
-            {featuredProjects.slice(0, 4).map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        ) : (
-          <p className="border-border border-y py-8 text-muted-foreground">Selected projects will appear here when they are highlighted.</p>
-        )}
-        <Link className="mt-7 inline-flex items-center gap-2 border border-foreground px-[18px] py-[13px] text-xs font-semibold transition-colors hover:bg-foreground hover:text-background" href="/projects">
-          See all projects <ArrowUpRight size={16} aria-hidden="true" />
-        </Link>
+        <FeaturedProjects initialProjects={projects} />
       </section>
 
       <section className="mx-auto w-[min(1160px,calc(100%-2rem))] border-t border-border py-28 max-md:py-20" aria-labelledby="snapshot-heading">
@@ -70,20 +54,7 @@ export default async function HomePage() {
               Curious, practical, <em className="font-semibold not-italic text-primary">always learning.</em>
             </h2>
           </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              ["Active projects", projects.length],
-              ["Languages used", languages.length],
-              ["Based in", siteConfig.location],
-            ].map(([label, value]) => (
-              <Card key={label} className="bg-muted/20 p-0 shadow-none">
-                <CardContent className="p-6">
-                  <p className="font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground">{label}</p>
-                  <p className="mt-6 text-4xl font-semibold tracking-[-.07em] text-primary">{value}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <ProjectHighlights initialProjects={projects} />
         </div>
         <Card className="mt-4 bg-primary p-0 text-primary-foreground shadow-none">
           <CardContent className="grid gap-6 p-7 md:grid-cols-[1fr_auto] md:items-center">

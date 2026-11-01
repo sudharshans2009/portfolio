@@ -41,7 +41,7 @@ export const auth = betterAuth({
 
       const resend = new Resend(apiKey);
       const result = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: user.email,
         subject: "Reset your SS.me password",
         text: `Hi ${user.name || "there"},\n\nUse this link to reset your SS.me password:\n${url}\n\nIf you did not request this, you can ignore this email.`,
@@ -66,7 +66,7 @@ export const auth = betterAuth({
           : user.email;
       const resend = new Resend(apiKey);
       const result = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: recipient,
         subject:
           "newEmail" in data
@@ -91,7 +91,7 @@ export const auth = betterAuth({
 
         const resend = new Resend(apiKey);
         const result = await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+          from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
           to: newEmail,
           subject: "Confirm your new SS.me email",
           text: `Hi ${user.name || "there"},\n\nConfirm your new email address here:\n${url}\n\nIf you did not request this, you can ignore this email.`,

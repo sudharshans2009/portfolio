@@ -1,7 +1,7 @@
 "use server";
 
 import { eq, isNotNull, isNull } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "@/database/client";
 import { message, project, user } from "@/database/schema";
@@ -106,6 +106,8 @@ export async function saveProject(
     }
     revalidatePath("/");
     revalidatePath("/projects");
+    revalidatePath("/about");
+    revalidateTag("managed-projects", "max");
     revalidatePath("/admin");
     return { success: true, message: "Project saved." };
   } catch (error) {
@@ -123,6 +125,8 @@ export async function deleteProject(
     await db.delete(project).where(eq(project.id, id));
     revalidatePath("/");
     revalidatePath("/projects");
+    revalidatePath("/about");
+    revalidateTag("managed-projects", "max");
     revalidatePath("/admin");
     return { success: true, message: "Project settings removed." };
   } catch (error) {

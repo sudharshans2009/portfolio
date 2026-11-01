@@ -1,4 +1,4 @@
-import { cache } from "react";
+import { cache } from "@/lib/cache";
 
 export interface GitHubProject {
   id: number | string;
@@ -64,15 +64,22 @@ export const getGitHubProjects = cache(async (): Promise<GitHubProject[]> => {
 
   const projects = (await response.json()) as GitHubProject[];
   return projects;
-});
+}, ["github-projects"], { revalidate: 3600, tags: ["github-projects"] });
 
 export function groupProjects(projects: GitHubProject[]) {
   const byName = new Map(projects.map((project) => [project.name.toLowerCase(), project]));
+  const groupedNames = new Set<string>();
   return projectGroups
     .map((group) => ({
       ...group,
       projects: group.projects
-        .map((name) => byName.get(name.toLowerCase()))
+        .map((name) => {
+          const normalizedName = name.toLowerCase();
+          if (groupedNames.has(normalizedName)) return undefined;
+          const project = byName.get(normalizedName);
+          if (project) groupedNames.add(normalizedName);
+          return project;
+        })
         .filter((project): project is GitHubProject => Boolean(project)),
     }))
     .filter((group) => group.projects.length > 0);

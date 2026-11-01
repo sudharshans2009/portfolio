@@ -2,8 +2,25 @@ import { desc } from "drizzle-orm";
 import { db } from "@/database/client";
 import { project } from "@/database/schema";
 import { getGitHubProjects } from "@/lib/github";
+import { cache } from "@/lib/cache";
 
-export async function getManagedProjects() {
+export type ManagedProject = {
+  id: number | string;
+  name: string;
+  description: string | null;
+  html_url: string;
+  homepage: string | null;
+  language: string | null;
+  topics: string[];
+  stargazers_count: number;
+  updated_at: string;
+  fork: boolean;
+  archived: boolean;
+  featured: boolean;
+  managedId: string;
+};
+
+export const getManagedProjects = cache(async (): Promise<ManagedProject[]> => {
   const [githubProjects, overrides] = await Promise.all([
     getGitHubProjects(),
     db.select().from(project).orderBy(desc(project.updatedAt)),
@@ -50,7 +67,7 @@ export async function getManagedProjects() {
     }));
 
   return [...managedGitHubProjects, ...customProjects];
-}
+}, ["managed-projects"], { revalidate: 3600, tags: ["managed-projects"] });
 
 export async function getAdminProjects() {
   const [githubProjects, overrides] = await Promise.all([

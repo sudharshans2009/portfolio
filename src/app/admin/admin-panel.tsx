@@ -15,6 +15,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import DataTable, { type DataTableColumn } from "@/components/ui/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type AdminAction = (
   state: AdminActionState,
@@ -92,7 +101,6 @@ export default function AdminPanel({
   }>;
 }) {
   const [tab, setTab] = useState<"users" | "messages" | "projects">("users");
-  const [addingProject, setAddingProject] = useState(false);
   return (
     <div className="grid gap-8">
       <nav className="flex flex-wrap gap-2 border-border border-b pb-3" aria-label="Admin sections">
@@ -105,27 +113,7 @@ export default function AdminPanel({
 
       {tab === "users" && (
         <Section title="Users" count={users.length}>
-          <div className="grid gap-3">
-            {users.map((item) => (
-              <div key={item.id} className="grid gap-4 border border-border p-4 md:grid-cols-[1fr_auto] md:items-center">
-                <div className="min-w-0">
-                  <p className="font-semibold">{item.name || "Unnamed user"}</p>
-                  <p className="break-all text-sm text-muted-foreground">{item.email}</p>
-                </div>
-                {item.email.toLowerCase() === OWNER_EMAIL ? (
-                  <span className="font-mono text-xs uppercase text-primary">Permanent owner</span>
-                ) : (
-                  <ActionForm
-                    action={updateUserRole}
-                    hidden={{ userId: item.id, role: item.role === "admin" ? "user" : "admin" }}
-                    submitLabel={item.role === "admin" ? "Demote to user" : "Promote to admin"}
-                  >
-                    <span className="font-mono text-xs uppercase text-muted-foreground">Currently {item.role}</span>
-                  </ActionForm>
-                )}
-              </div>
-            ))}
-          </div>
+          <UserTable users={users} />
         </Section>
       )}
 
@@ -167,70 +155,123 @@ export default function AdminPanel({
 
       {tab === "projects" && (
         <Section title="Projects" count={projects.length}>
-          <div className="grid gap-5">
-            <Button type="button" variant="outline" className="w-fit" onClick={() => setAddingProject(true)}>
-              Add custom project
-            </Button>
-            {addingProject && (
-              <ProjectEditor
-                project={{
-                  id: "",
-                  githubName: null,
-                  name: "",
-                  description: "",
-                  url: "https://",
-                  language: "",
-                  topics: [],
-                  featured: false,
-                  visible: true,
-                  isCustom: false,
-                }}
-              />
-            )}
-            {projects.map((item) => <ProjectEditor key={item.id} project={item} />)}
-          </div>
+          <ProjectTable projects={projects} />
         </Section>
       )}
     </div>
   );
 }
 
-function ProjectEditor({ project: item }: { project: {
+function UserTable({ users }: { users: Array<{ id: string; name: string; email: string; role: string; createdAt: Date }> }) {
+  const columns: DataTableColumn<typeof users[number]>[] = [
+    { header: "User", cell: (item) => <span className="font-medium">{item.name || "Unnamed user"}</span>, searchable: (item) => `${item.name} ${item.email}` },
+    { header: "Email", cell: (item) => <span className="break-all text-muted-foreground">{item.email}</span>, searchable: (item) => item.email },
+    { header: "Role", cell: (item) => <span className="font-mono text-xs uppercase">{item.role}</span>, searchable: (item) => item.role },
+    {
+      header: "Actions",
+      cell: (item) => item.email.toLowerCase() === OWNER_EMAIL
+        ? <span className="font-mono text-xs uppercase text-primary">Permanent owner</span>
+        : <UserRoleDialog user={item} />,
+    },
+  ];
+  return <DataTable data={users} columns={columns} emptyMessage="No users found." placeholder="Search users…" />;
+}
+
+function UserRoleDialog({ user }: { user: { id: string; name: string; email: string; role: string } }) {
+  const [open, setOpen] = useState(false);
+  const [state, formAction, pending] = useActionState(updateUserRole, initialState);
+  useEffect(() => {
+    if (state.success) setOpen(false);
+    if (state.message) toast.add({ type: state.success ? "success" : "error", title: state.success ? "User updated" : "Update failed", description: state.message });
+  }, [state]);
+  const nextRole = user.role === "admin" ? "user" : "admin";
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Button type="button" size="sm" variant="outline" onClick={() => setOpen(true)}>Edit role</Button>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update user role</DialogTitle>
+          <DialogDescription>{user.name || user.email}</DialogDescription>
+        </DialogHeader>
+        <form action={formAction} className="grid gap-4">
+          <input type="hidden" name="userId" value={user.id} />
+          <input type="hidden" name="role" value={nextRole} />
+          <p className="text-sm text-muted-foreground">Change this user from <strong>{user.role}</strong> to <strong>{nextRole}</strong>?</p>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Update role"}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ProjectTable({ projects }: { projects: Array<{
+  id: string; githubName?: string | null; name: string; description: string | null; url: string;
+  language: string | null; topics: string[]; featured: boolean; visible: boolean; isCustom: boolean;
+}> }) {
+  const columns: DataTableColumn<typeof projects[number]>[] = [
+    { header: "Project", cell: (item) => <span className="font-medium">{item.name}</span>, searchable: (item) => `${item.name} ${item.githubName || ""}` },
+    { header: "Language", cell: (item) => item.language || "—", searchable: (item) => item.language || "" },
+    { header: "Status", cell: (item) => <span className="font-mono text-xs uppercase">{item.visible ? "Visible" : "Hidden"}{item.featured ? " · Featured" : ""}</span>, searchable: (item) => `${item.visible} ${item.featured}` },
+    { header: "Actions", cell: (item) => <ProjectDialog project={item} /> },
+  ];
+  return (
+    <div className="grid gap-3">
+      <ProjectDialog />
+      <DataTable data={projects} columns={columns} emptyMessage="No projects found." placeholder="Search projects…" />
+    </div>
+  );
+}
+
+function ProjectDialog({ project: item }: { project?: {
   id: string; githubName?: string | null; name: string; description: string | null; url: string;
   language: string | null; topics: string[]; featured: boolean; visible: boolean; isCustom: boolean;
 } }) {
+  const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState(saveProject, initialState);
   useEffect(() => {
     if (state.message) toast.add({ type: state.success ? "success" : "error", title: state.success ? "Project saved" : "Project not saved", description: state.message });
+    if (state.success) setOpen(false);
   }, [state]);
+  const project = item || { id: "", githubName: null, name: "", description: "", url: "https://", language: "", topics: [], featured: false, visible: true, isCustom: false };
   return (
-    <form action={formAction} className="grid gap-4 border border-border p-5">
-      <input type="hidden" name="id" value={item.id} />
-      {item.githubName && <input type="hidden" name="githubName" value={item.githubName} />}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="font-mono text-xs uppercase text-muted-foreground">{item.githubName ? `GitHub · ${item.githubName}` : "Custom project"}</p>
-        <div className="flex gap-4 text-sm">
-          <Label className="flex items-center gap-2">
-            <Checkbox name="visible" defaultChecked={item.visible} value="on" />
-            Visible
-          </Label>
-          <Label className="flex items-center gap-2">
-            <Checkbox name="featured" defaultChecked={item.featured} value="on" />
-            Highlight
-          </Label>
-        </div>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2">
-        <Input name="name" defaultValue={item.name} placeholder="Project name" required />
-        <Input name="url" defaultValue={item.url} type="url" placeholder="Project URL" required />
-        <Input name="language" defaultValue={item.language ?? ""} placeholder="Language" />
-        <Input name="topics" defaultValue={item.topics.join(", ")} placeholder="Topics, comma separated" />
-      </div>
-      <Textarea name="description" defaultValue={item.description ?? ""} placeholder="Description" rows={3} />
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save project"}</Button>
-        {item.isCustom && <ActionForm action={deleteProject} hidden={{ id: item.id }} submitLabel="Delete project" variant="destructive" />}
-      </div>
-    </form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Button type="button" size="sm" variant={item ? "outline" : "default"} onClick={() => setOpen(true)}>{item ? "Edit" : "Add custom project"}</Button>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>{item ? "Edit project" : "Add custom project"}</DialogTitle>
+          <DialogDescription>{item?.githubName ? `GitHub · ${item.githubName}` : "Project details and visibility."}</DialogDescription>
+        </DialogHeader>
+        <form action={formAction} className="grid gap-4">
+          <input type="hidden" name="id" value={project.id} />
+          {project.githubName && <input type="hidden" name="githubName" value={project.githubName} />}
+          <div className="grid gap-4 md:grid-cols-2">
+            <Label className="w-full flex-col items-start gap-2">Name<Input name="name" defaultValue={project.name} required /></Label>
+            <Label className="w-full flex-col items-start gap-2">URL<Input name="url" defaultValue={project.url} type="url" required /></Label>
+            <Label className="w-full flex-col items-start gap-2">Language<Input name="language" defaultValue={project.language ?? ""} /></Label>
+            <Label className="w-full flex-col items-start gap-2">Topics<Input name="topics" defaultValue={project.topics.join(", ")} /></Label>
+          </div>
+          <Label className="w-full flex-col items-start gap-2">Description<Textarea name="description" defaultValue={project.description ?? ""} rows={3} /></Label>
+          <div className="flex flex-wrap gap-4 text-sm">
+            <Label className="flex items-center gap-2"><Checkbox name="visible" defaultChecked={project.visible} value="on" />Visible</Label>
+            <Label className="flex items-center gap-2"><Checkbox name="featured" defaultChecked={project.featured} value="on" />Highlight</Label>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Save project"}</Button>
+          </DialogFooter>
+        </form>
+        {project.isCustom && (
+          <ActionForm
+            action={deleteProject}
+            hidden={{ id: project.id }}
+            submitLabel="Delete project"
+            variant="destructive"
+          />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,16 +1,19 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/metadata";
-import { getGitHubProjects } from "@/lib/github";
+import { getManagedProjects } from "@/lib/managed-projects";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import AboutProjectSummary from "@/components/about-project-summary";
 
 export const metadata = generateMetadata(
   "About Sudharshan — SS.me",
   "About Sudharshan S, a student at Amrita Vidyalayam, Coimbatore, who builds coding projects.",
   "/about",
 );
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 const learningGroups = [
   {
@@ -31,11 +34,7 @@ const learningGroups = [
 ] as const;
 
 export default async function AboutPage() {
-  const projects = await getGitHubProjects();
-  const activeProjects = projects.filter((project) => !project.fork && !project.archived);
-  const languages = new Set(
-    activeProjects.map((project) => project.language).filter((language): language is string => Boolean(language)),
-  );
+  const projects = await getManagedProjects();
 
   return (
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
@@ -131,20 +130,7 @@ export default async function AboutPage() {
             These numbers are generated from my public GitHub repositories.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
-          {[
-            ["Active projects", activeProjects.length],
-            ["Languages used", languages.size],
-            ["Public repositories", projects.length],
-          ].map(([label, value]) => (
-            <Card key={label} className="bg-muted/20 p-0 shadow-none">
-              <CardContent className="p-6">
-                <p className="font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground">{label}</p>
-                <p className="mt-5 text-5xl font-semibold tracking-[-.08em] text-primary">{value}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <AboutProjectSummary initialProjects={projects} />
       </section>
     </main>
   );

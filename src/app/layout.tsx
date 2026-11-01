@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import ThemeToggle from "@/components/theme-toggle";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toast";
+import QueryProvider from "@/components/query-provider";
 import { siteConfig } from "@/lib/site-config";
 import "@/app/styles.css";
 
@@ -48,15 +49,17 @@ export default function FrontendLayout({
       className={`${poppins.variable} ${jetBrainsMono.variable}`}
     >
       <body className="font-sans">
-        <TooltipProvider>
-          <Toaster>
-          <Navbar />
-          {children}
-          <Footer>
-            <ThemeToggle />
-          </Footer>
-          </Toaster>
-        </TooltipProvider>
+        <QueryProvider>
+          <TooltipProvider>
+            <Toaster>
+              <Navbar />
+              {children}
+              <Footer>
+                <ThemeToggle />
+              </Footer>
+            </Toaster>
+          </TooltipProvider>
+        </QueryProvider>
       </body>
     </html>
   );

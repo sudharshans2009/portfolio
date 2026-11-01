@@ -2,18 +2,11 @@
 
 import { db } from "@/database/client";
 import { message } from "@/database/schema";
-import { z } from "zod";
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/site-config";
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { checkRateLimit } from "@/lib/rate-limit";
-
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your name.").max(80),
-  email: z.string().trim().email("Please enter a valid email address.").max(254),
-  body: z.string().trim().min(10, "Please write a little more.").max(5000),
-});
+import { contactSchema } from "./schema";
 
 export type ContactState = {
   success: boolean;
@@ -34,22 +27,11 @@ export async function submitContact(
     return { success: false, message: "Too many messages. Please try again later." };
   }
 
-  if (formData.get("website")) {
-    return { success: true, message: "Thanks — your message is on its way." };
-  }
-
-  const session = await auth.api.getSession({ headers: requestHeaders });
-  if (!session) {
-    return {
-      success: false,
-      message: "Please sign in before sending a message.",
-    };
-  }
-
   const parsed = contactSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     body: formData.get("body"),
+    website: formData.get("website") || undefined,
   });
 
   if (!parsed.success) {
@@ -57,6 +39,10 @@ export async function submitContact(
       success: false,
       message: parsed.error.issues[0]?.message || "Please check your details.",
     };
+  }
+
+  if (parsed.data.website) {
+    return { success: true, message: "Thanks — your message is on its way." };
   }
 
   try {
@@ -85,13 +71,13 @@ export async function submitContact(
     const emailContent = `Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\n\nMessage:\n${parsed.data.body}`;
     const [userEmail, ownerEmail] = await Promise.all([
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: parsed.data.email,
         subject: "Your message to SS.me was received",
         text: `Hi ${parsed.data.name},\n\nYour message was successfully received by Sudharshan.\n\n${emailContent}\n\nThanks for reaching out.`,
       }),
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: siteConfig.ownerEmail,
         replyTo: parsed.data.email,
         subject: `New SS.me contact message from ${parsed.data.name}`,
