@@ -18,7 +18,7 @@ export default async function ProjectsPage() {
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
       <header className="mb-[72px] max-w-[760px]">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">01 — Projects</p>
-        <h1 className="my-7 text-[clamp(4rem,10vw,8rem)] font-medium leading-[.95] tracking-[-.09em]">Learning by <em className="font-semibold not-italic text-primary">building.</em></h1>
+        <h1 className="my-7 text-[clamp(4rem,10vw,8rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,15vw,5rem)]">Learning by <em className="font-semibold not-italic text-primary">building.</em></h1>
         <p className="max-w-[440px] text-[1.05rem] leading-6 text-muted-foreground">
           A collection of coding projects I&apos;ve made while learning,
           experimenting, and trying new ideas.

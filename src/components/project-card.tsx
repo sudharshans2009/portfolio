@@ -12,12 +12,12 @@ export default function ProjectCard({
   index: number;
 }) {
   return (
-    <Card className="group flex min-h-[330px] flex-col justify-between bg-background p-0 transition-colors hover:bg-muted/70">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 border-b p-6 font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground">
+    <Card className="group flex min-h-[330px] flex-col justify-between bg-background p-0 transition-colors hover:bg-muted/70 max-md:min-h-[280px]">
+      <CardHeader className="flex flex-row items-center justify-between gap-4 border-b p-6 font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground max-md:p-4">
         <span className="text-primary">{String(index + 1).padStart(2, "0")} / project</span>
         {project.language && <span>{project.language}</span>}
       </CardHeader>
-      <CardContent className="flex flex-1 flex-col justify-center p-6">
+      <CardContent className="flex flex-1 flex-col justify-center p-6 max-md:p-4">
         <CardTitle className="text-[clamp(1.5rem,2.4vw,2.1rem)] font-semibold capitalize tracking-[-.05em]">
           {project.name.replaceAll("-", " ")}
         </CardTitle>
@@ -25,7 +25,7 @@ export default function ProjectCard({
           {project.description || "A coding project from my open-source lab."}
         </p>
       </CardContent>
-      <CardFooter className="flex min-h-16 items-center justify-between gap-4 border-t bg-transparent p-6">
+      <CardFooter className="flex min-h-16 items-center justify-between gap-4 border-t bg-transparent p-6 max-md:p-4">
         <div className="flex min-w-0 flex-wrap gap-1.5" aria-label="Technologies">
           {project.topics.length > 0
             ? project.topics.slice(0, 3).map((topic) => (

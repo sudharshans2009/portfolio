@@ -28,7 +28,7 @@ export default async function HomePage() {
     <main>
       <section className="mx-auto flex min-h-[680px] w-[min(1160px,calc(100%-2rem))] flex-col justify-center py-24 max-md:min-h-[590px] max-md:py-20">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Independent developer · {siteConfig.location}</p>
-        <h1 className="my-7 mb-11 max-w-[1000px] text-[clamp(4rem,11vw,9.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3.7rem,17vw,6rem)]">
+        <h1 className="my-7 mb-11 max-w-[1000px] text-[clamp(4rem,11vw,9.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,15vw,5rem)]">
           Coding projects,
           <br />
           <em className="font-semibold not-italic text-primary">carefully made.</em>

@@ -20,7 +20,7 @@ export default async function ContactPage() {
     <main className="mx-auto min-h-[720px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:min-h-[650px] max-md:py-20">
       <section className="max-w-[760px]">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">A good place to start</p>
-        <h1 className="my-7 text-[clamp(3.5rem,9vw,8rem)] font-medium leading-[.95] tracking-[-.09em]">Let&apos;s make something <em className="font-semibold not-italic text-primary">useful.</em></h1>
+        <h1 className="my-7 text-[clamp(3.5rem,9vw,8rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">Let&apos;s make something <em className="font-semibold not-italic text-primary">useful.</em></h1>
         <p className="max-w-[440px] text-[1.05rem] leading-6 text-muted-foreground">
           I&apos;m always interested in thoughtful collaborations, open-source
           ideas, coding projects, or just want to say hello.

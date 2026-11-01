@@ -41,7 +41,7 @@ export default async function AboutPage() {
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
       <header className="mb-[72px] max-w-[760px]">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">02 — About</p>
-        <h1 className="my-7 text-[clamp(4rem,10vw,8rem)] font-medium leading-[.95] tracking-[-.09em]">A student who <em className="font-semibold not-italic text-primary">builds.</em></h1>
+        <h1 className="my-7 text-[clamp(4rem,10vw,8rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,15vw,5rem)]">A student who <em className="font-semibold not-italic text-primary">builds.</em></h1>
       </header>
       <div className="ml-[33.333%] max-w-[650px] space-y-6 text-[1.15rem] leading-7 text-muted-foreground max-md:ml-0">
         <p>

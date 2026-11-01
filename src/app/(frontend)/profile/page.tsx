@@ -15,7 +15,7 @@ export default async function ProfilePage() {
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
       <div className="mb-14 max-w-[760px]">
         <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Your account</p>
-        <h1 className="my-7 text-[clamp(3.5rem,9vw,7.5rem)] font-medium leading-[.95] tracking-[-.09em]">Your space to <em className="font-semibold not-italic text-primary">personalize.</em></h1>
+        <h1 className="my-7 text-[clamp(3.5rem,9vw,7.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">Your space to <em className="font-semibold not-italic text-primary">personalize.</em></h1>
         <p className="max-w-[520px] text-[1.05rem] leading-6 text-muted-foreground">Manage your public profile details and the settings connected to your SS.me account.</p>
       </div>
       <Tabs defaultValue="profile" className="grid gap-8 lg:max-w-[820px]">
