@@ -8,7 +8,7 @@ export const auth = betterAuth({
   baseURL:
     process.env.BETTER_AUTH_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000",
+    "https://sudharshans.me",
   secret: process.env.BETTER_AUTH_SECRET || "ssme-local-development-secret-change-me",
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -86,5 +86,5 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"],
+  trustedOrigins: [process.env.NEXT_PUBLIC_SITE_URL || "https://sudharshans.me"],
 });

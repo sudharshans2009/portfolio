@@ -4,7 +4,11 @@ import * as schema from "./schema";
 
 const connectionString = process.env.POSTGRES_URL;
 
-const client = postgres(connectionString || "postgres://localhost/ssme", {
+if (!connectionString) {
+  throw new Error("POSTGRES_URL is not configured.");
+}
+
+const client = postgres(connectionString, {
   prepare: false,
 });
 
