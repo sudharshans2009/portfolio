@@ -23,11 +23,12 @@ export const projectGroups: ProjectGroup[] = [
   {
     title: "Full-stack web apps",
     projects: [
-      "school-managment",
+      "school-management",
+      "study-management",
       "library-management",
       "ecommerce-store",
       "budget-tracker",
-      "notion-blog",
+      "portfolio",
     ],
   },
   { title: "Chat apps", projects: ["chat", "chat-react"] },
@@ -36,13 +37,11 @@ export const projectGroups: ProjectGroup[] = [
     projects: [
       "markdown-editor",
       "toolset",
-      "base-convertion",
+      "base-conversion",
       "truth-table",
       "website-blocker",
-      "utterances",
       "book-tracker",
       "book-tracker-app",
-      "odd-even",
     ],
   },
   {
@@ -50,12 +49,10 @@ export const projectGroups: ProjectGroup[] = [
     projects: ["convolution-matrix", "confusion-matrix"],
   },
   {
-    title: "IT Project 2023 group",
+    title: "IT Project 2023",
     projects: [
       "itproject2023",
       "itproject2023-lunar",
-      "lunar-assistant",
-      "itproject2023-assistant",
       "itproject2023-image",
       "itproject2023-qrcode",
       "itproject2023-weather",
@@ -63,45 +60,12 @@ export const projectGroups: ProjectGroup[] = [
       "itproject2023-paint",
       "itproject2023-quiz",
       "itproject2023-d-chat",
+      "lunar-assistant",
     ],
   },
   {
     title: "Python and school projects",
-    projects: ["computer-project", "com-project", "robot"],
-  },
-  {
-    title: "Portfolio and personal sites",
-    projects: [
-      "portfolio",
-      "sudharshans2009.github.io",
-      "sudharshans2009",
-      "bsoundharajan",
-    ],
-  },
-  {
-    title: "Archived",
-    projects: [
-      "portfolio-payload",
-      "notion-blog",
-      "notion-blog-archived",
-      "portfolio-archive-v1",
-      "portfolio-archive-v2",
-    ],
-  },
-  {
-    title: "Forks",
-    projects: [
-      "RedditVideoMakerBot",
-      "discord-dashboard-react",
-      "links.madlad.store",
-      "minecraft-server",
-      "Minecraft-Server-on-Codespace",
-      "massivedecks",
-      "Presentation1",
-      "Sms1",
-      "IMAGE-TO-HTML-CSS",
-      "HANDCRICKET-GAME",
-    ],
+    projects: ["computer-project", "robot"],
   },
 ];
 
