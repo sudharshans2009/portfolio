@@ -15,12 +15,23 @@ export default function Navbar() {
   return (
     <header className="border-border border-b bg-background">
       <div className="mx-auto flex min-h-20 w-[min(1160px,calc(100%-2rem))] items-center justify-between gap-4">
-        <Link href="/" className="text-[1.35rem] font-extrabold tracking-[-.08em]" aria-label="SS.me home">
+        <Link
+          href="/"
+          className="text-[1.35rem] font-extrabold tracking-[-.08em]"
+          aria-label="SS.me home"
+        >
           SS<span className="text-primary">.me</span>
         </Link>
-        <nav aria-label="Primary navigation" className="flex items-center justify-center gap-[clamp(14px,2vw,28px)] whitespace-nowrap max-md:hidden">
+        <nav
+          aria-label="Primary navigation"
+          className="flex items-center justify-center gap-[clamp(14px,2vw,28px)] whitespace-nowrap max-md:hidden"
+        >
           {navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+            >
               {item.label}
             </Link>
           ))}
@@ -35,7 +46,14 @@ export default function Navbar() {
           </a>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href={session?.user ? "/profile" : "/user/sign-in"} className={buttonVariants({ variant: "outline", size: "sm", className: "login-link" })}>
+          <Link
+            href={session?.user ? "/profile" : "/user/sign-in"}
+            className={buttonVariants({
+              variant: "outline",
+              size: "sm",
+              className: "login-link",
+            })}
+          >
             {isPending ? "Login" : session?.user ? "Profile" : "Login"}
           </Link>
           <Button
@@ -45,18 +63,35 @@ export default function Navbar() {
             className="hidden max-md:grid"
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
-            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={
+              menuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
             onClick={() => setMenuOpen((open) => !open)}
           >
-            {menuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+            {menuOpen ? (
+              <X size={18} aria-hidden="true" />
+            ) : (
+              <Menu size={18} aria-hidden="true" />
+            )}
           </Button>
         </div>
       </div>
       {menuOpen && (
-        <div id="mobile-navigation" className="border-t border-border px-4 py-4 md:hidden">
-          <nav aria-label="Mobile navigation" className="mx-auto grid w-[min(1160px,calc(100%-2rem))] gap-1">
+        <div
+          id="mobile-navigation"
+          className="border-t border-border px-4 py-4 md:hidden"
+        >
+          <nav
+            aria-label="Mobile navigation"
+            className="mx-auto grid w-[min(1160px,calc(100%-2rem))] gap-1"
+          >
             {navigation.map((item) => (
-              <Link key={item.href} href={item.href} className="border-b border-border py-3 text-sm font-semibold" onClick={() => setMenuOpen(false)}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className="border-b border-border py-3 text-sm font-semibold"
+                onClick={() => setMenuOpen(false)}
+              >
                 {item.label}
               </Link>
             ))}

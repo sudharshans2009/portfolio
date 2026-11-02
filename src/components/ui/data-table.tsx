@@ -43,7 +43,10 @@ export default function DataTable<T>({
   return (
     <div className="grid gap-3">
       <div className="relative max-w-sm">
-        <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+        <Search
+          className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        />
         <Input
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
@@ -57,17 +60,28 @@ export default function DataTable<T>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => <TableHead key={column.header}>{column.header}</TableHead>)}
+              {columns.map((column) => (
+                <TableHead key={column.header}>{column.header}</TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredData.length > 0 ? filteredData.map((row, index) => (
-              <TableRow key={index}>
-                {columns.map((column) => <TableCell key={column.header}>{column.cell(row)}</TableCell>)}
-              </TableRow>
-            )) : (
+            {filteredData.length > 0 ? (
+              filteredData.map((row, index) => (
+                <TableRow key={index}>
+                  {columns.map((column) => (
+                    <TableCell key={column.header}>
+                      {column.cell(row)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center text-muted-foreground"
+                >
                   {emptyMessage}
                 </TableCell>
               </TableRow>

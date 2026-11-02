@@ -23,12 +23,19 @@ export default async function AdminPage() {
   return (
     <main className="mx-auto min-h-[760px] w-full max-w-[1160px] px-4 py-28 max-md:py-20">
       <header className="mb-12">
-        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Admin workspace</p>
+        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+          Admin workspace
+        </p>
         <h1 className="mt-7 text-[clamp(3rem,8vw,7rem)] font-medium leading-[.95] tracking-[-.09em]">
-          Keep things <em className="font-semibold not-italic text-primary">useful.</em>
+          Keep things{" "}
+          <em className="font-semibold not-italic text-primary">useful.</em>
         </h1>
       </header>
-      <AdminPanel users={users} activeMessages={activeMessages} projects={projects} />
+      <AdminPanel
+        users={users}
+        activeMessages={activeMessages}
+        projects={projects}
+      />
     </main>
   );
 }

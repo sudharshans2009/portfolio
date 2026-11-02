@@ -3,7 +3,9 @@ import { client, db } from "../src/database/client";
 import { projectGroups, getGitHubProjects } from "../src/lib/github";
 import { project } from "../src/database/schema";
 
-const githubNames = [...new Set(projectGroups.flatMap((group) => group.projects))];
+const githubNames = [
+  ...new Set(projectGroups.flatMap((group) => group.projects)),
+];
 const githubNameSet = new Set(githubNames.map((name) => name.toLowerCase()));
 const githubProjects = await getGitHubProjects();
 const selectedProjects = githubProjects.filter((item) =>

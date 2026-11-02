@@ -19,9 +19,7 @@ const FormField = <
   TName extends FieldPath<TFieldValues>,
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => (
-  <Controller {...props} />
-);
+}: ControllerProps<TFieldValues, TName>) => <Controller {...props} />;
 
 const FormItem = React.forwardRef<
   HTMLDivElement,

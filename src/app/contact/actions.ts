@@ -24,7 +24,10 @@ export async function submitContact(
     "unknown";
   const rateLimit = checkRateLimit(`contact:${address}`, 5, 10 * 60 * 1000);
   if (!rateLimit.allowed) {
-    return { success: false, message: "Too many messages. Please try again later." };
+    return {
+      success: false,
+      message: "Too many messages. Please try again later.",
+    };
   }
 
   const parsed = contactSchema.safeParse({
@@ -52,7 +55,6 @@ export async function submitContact(
       email: parsed.data.email,
       body: parsed.data.body,
     });
-
   } catch (error) {
     console.error("Contact message could not be saved", error);
     return {
@@ -71,13 +73,15 @@ export async function submitContact(
     const emailContent = `Name: ${parsed.data.name}\nEmail: ${parsed.data.email}\n\nMessage:\n${parsed.data.body}`;
     const [userEmail, ownerEmail] = await Promise.all([
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
+        from:
+          process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: parsed.data.email,
         subject: "Your message to SS.me was received",
         text: `Hi ${parsed.data.name},\n\nYour message was successfully received by Sudharshan.\n\n${emailContent}\n\nThanks for reaching out.`,
       }),
       resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
+        from:
+          process.env.RESEND_FROM_EMAIL || "SS.me <no-reply@sudharshans.me>",
         to: siteConfig.ownerEmail,
         replyTo: parsed.data.email,
         subject: `New SS.me contact message from ${parsed.data.name}`,
@@ -86,10 +90,14 @@ export async function submitContact(
     ]);
 
     if (userEmail.error || ownerEmail.error) {
-      console.error("Contact email delivery failed", userEmail.error || ownerEmail.error);
+      console.error(
+        "Contact email delivery failed",
+        userEmail.error || ownerEmail.error,
+      );
       return {
         success: false,
-        message: "Your message was saved, but email delivery failed. Please try again later.",
+        message:
+          "Your message was saved, but email delivery failed. Please try again later.",
       };
     }
 
@@ -98,7 +106,8 @@ export async function submitContact(
     console.error("Contact email delivery failed", error);
     return {
       success: false,
-      message: "Your message was saved, but email delivery failed. Please try again later.",
+      message:
+        "Your message was saved, but email delivery failed. Please try again later.",
     };
   }
 }

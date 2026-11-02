@@ -10,9 +10,7 @@ describe("SS.me metadata", () => {
       "/projects",
     );
 
-    expect(metadata.alternates?.canonical).toBe(
-      `${siteConfig.url}/projects`,
-    );
+    expect(metadata.alternates?.canonical).toBe(`${siteConfig.url}/projects`);
     expect(metadata.description).toBe("Selected work by Sudharshan S.");
   });
 

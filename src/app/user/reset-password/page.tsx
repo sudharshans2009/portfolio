@@ -30,13 +30,17 @@ function ResetPasswordForm() {
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPending(true);
-    const result = await authClient.resetPassword({ newPassword: password, token });
+    const result = await authClient.resetPassword({
+      newPassword: password,
+      token,
+    });
     setPending(false);
     if (result.error) {
       toast.add({
         type: "error",
         title: "Password reset failed",
-        description: result.error.message || "This reset link may have expired.",
+        description:
+          result.error.message || "This reset link may have expired.",
       });
       return;
     }
@@ -53,21 +57,37 @@ function ResetPasswordForm() {
     <main className="mx-auto grid min-h-[760px] w-[min(1160px,calc(100%-2rem))] place-items-center py-24">
       <Card className="w-full max-w-[430px] p-9">
         <CardHeader>
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Account recovery</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+            Account recovery
+          </p>
           <CardTitle>Choose a new password</CardTitle>
         </CardHeader>
         <CardContent>
           {!token ? (
             <div className="grid gap-4 text-sm text-muted-foreground">
-              <Link className="text-foreground underline underline-offset-4" href="/user/forgot-password">Request a new link</Link>
+              <Link
+                className="text-foreground underline underline-offset-4"
+                href="/user/forgot-password"
+              >
+                Request a new link
+              </Link>
             </div>
           ) : (
             <form className="grid gap-5" onSubmit={submit}>
               <Label className="w-full flex-col items-start gap-2">
                 New password
-                <Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={8} autoComplete="new-password" />
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                />
               </Label>
-              <Button type="submit" disabled={pending}>{pending ? "Saving…" : "Set new password"}</Button>
+              <Button type="submit" disabled={pending}>
+                {pending ? "Saving…" : "Set new password"}
+              </Button>
             </form>
           )}
         </CardContent>

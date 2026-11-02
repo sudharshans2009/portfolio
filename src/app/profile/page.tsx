@@ -18,18 +18,44 @@ export default async function ProfilePage() {
   return (
     <main className="mx-auto min-h-[760px] w-[min(1160px,calc(100%-2rem))] py-28 max-md:py-20">
       <div className="mb-14 max-w-[760px]">
-        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Your account</p>
-        <h1 className="my-7 text-[clamp(3.5rem,9vw,7.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">Your space to <em className="font-semibold not-italic text-primary">personalize.</em></h1>
-        <p className="max-w-[520px] text-[1.05rem] leading-6 text-muted-foreground">Manage your public profile details and the settings connected to your SS.me account.</p>
-        {adminSession && <Link href="/admin" className={`${buttonVariants({ variant: "outline", size: "sm" })} mt-6`}>Open admin workspace</Link>}
+        <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+          Your account
+        </p>
+        <h1 className="my-7 text-[clamp(3.5rem,9vw,7.5rem)] font-medium leading-[.95] tracking-[-.09em] max-md:text-[clamp(3rem,14vw,5rem)]">
+          Your space to{" "}
+          <em className="font-semibold not-italic text-primary">
+            personalize.
+          </em>
+        </h1>
+        <p className="max-w-[520px] text-[1.05rem] leading-6 text-muted-foreground">
+          Manage your public profile details and the settings connected to your
+          SS.me account.
+        </p>
+        {adminSession && (
+          <Link
+            href="/admin"
+            className={`${buttonVariants({ variant: "outline", size: "sm" })} mt-6`}
+          >
+            Open admin workspace
+          </Link>
+        )}
       </div>
       <Tabs defaultValue="profile" className="grid gap-8 lg:max-w-[820px]">
-        <TabsList variant="line" className="h-auto w-full items-stretch justify-start gap-0 overflow-x-auto border-b border-border p-0">
-          <TabsTrigger value="profile" className="min-w-[155px] justify-center gap-3 border-b-2 border-transparent px-4 py-4 text-center">
+        <TabsList
+          variant="line"
+          className="h-auto w-full items-stretch justify-start gap-0 overflow-x-auto border-b border-border p-0"
+        >
+          <TabsTrigger
+            value="profile"
+            className="min-w-[155px] justify-center gap-3 border-b-2 border-transparent px-4 py-4 text-center"
+          >
             <UserRound size={16} aria-hidden="true" />
             Profile details
           </TabsTrigger>
-          <TabsTrigger value="settings" className="min-w-[155px] justify-center gap-3 border-b-2 border-transparent px-4 py-4 text-center">
+          <TabsTrigger
+            value="settings"
+            className="min-w-[155px] justify-center gap-3 border-b-2 border-transparent px-4 py-4 text-center"
+          >
             <Settings size={16} aria-hidden="true" />
             User settings
           </TabsTrigger>
@@ -43,15 +69,22 @@ export default async function ProfilePage() {
                 </div>
                 <div>
                   <CardTitle className="text-base">Profile details</CardTitle>
-                  <p className="mt-1 text-sm text-muted-foreground">The public details connected to your SS.me account.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    The public details connected to your SS.me account.
+                  </p>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-6"><ProfileForm /></CardContent>
+            <CardContent className="p-6">
+              <ProfileForm />
+            </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="settings">
-          <AccountSettings email={session.user.email} createdAt={session.user.createdAt} />
+          <AccountSettings
+            email={session.user.email}
+            createdAt={session.user.createdAt}
+          />
         </TabsContent>
       </Tabs>
     </main>

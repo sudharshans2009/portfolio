@@ -10,10 +10,15 @@ export default function Footer({ children }: { children?: React.ReactNode }) {
       <div className="mx-auto w-[min(1160px,calc(100%-2rem))]">
         <div className="flex justify-between gap-10 max-md:flex-col max-md:items-start">
           <div>
-            <Link href="/" className="text-[1.35rem] font-extrabold tracking-[-.08em]">
+            <Link
+              href="/"
+              className="text-[1.35rem] font-extrabold tracking-[-.08em]"
+            >
               SS<span className="text-primary">.me</span>
             </Link>
-            <p className="mt-5 max-w-[310px] text-sm leading-6 text-muted-foreground">{siteConfig.positioning}</p>
+            <p className="mt-5 max-w-[310px] text-sm leading-6 text-muted-foreground">
+              {siteConfig.positioning}
+            </p>
           </div>
           <div className="flex items-center gap-6 whitespace-nowrap text-xs text-muted-foreground max-md:flex-wrap max-md:gap-x-5 max-md:gap-y-3">
             {navigation.map((item) => (
@@ -21,8 +26,14 @@ export default function Footer({ children }: { children?: React.ReactNode }) {
                 {item.label}
               </Link>
             ))}
-            <a className="inline-flex items-center gap-2" href={siteConfig.github} target="_blank" rel="noreferrer">
-              <span>GitHub</span><ArrowUpRight size={14} aria-hidden="true" />
+            <a
+              className="inline-flex items-center gap-2"
+              href={siteConfig.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>GitHub</span>
+              <ArrowUpRight size={14} aria-hidden="true" />
             </a>
           </div>
         </div>

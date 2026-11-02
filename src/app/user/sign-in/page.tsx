@@ -13,10 +13,14 @@ export default function SignInPage() {
     <main className="mx-auto grid min-h-[760px] w-[min(1160px,calc(100%-2rem))] place-items-center py-24">
       <Card className="w-full max-w-[430px] p-9">
         <CardHeader>
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Welcome back</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+            Welcome back
+          </p>
           <CardTitle>Login to SS.me</CardTitle>
         </CardHeader>
-        <CardContent><AuthForm mode="sign-in" /></CardContent>
+        <CardContent>
+          <AuthForm mode="sign-in" />
+        </CardContent>
       </Card>
     </main>
   );

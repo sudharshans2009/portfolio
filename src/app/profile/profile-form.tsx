@@ -63,8 +63,11 @@ export default function ProfileForm() {
     setPending(true);
     const formData = new FormData();
     formData.set("file", file);
-    const response = await fetch("/api/profile/image", { method: "POST", body: formData });
-    const result = await response.json() as { url?: string; error?: string };
+    const response = await fetch("/api/profile/image", {
+      method: "POST",
+      body: formData,
+    });
+    const result = (await response.json()) as { url?: string; error?: string };
     setPending(false);
     if (!response.ok || !result.url) {
       toast.add({
@@ -80,7 +83,8 @@ export default function ProfileForm() {
       toast.add({
         type: "error",
         title: "Profile image failed",
-        description: update.error.message || "Profile image could not be saved.",
+        description:
+          update.error.message || "Profile image could not be saved.",
       });
       return;
     }
@@ -99,7 +103,8 @@ export default function ProfileForm() {
       toast.add({
         type: "error",
         title: "Profile image removal failed",
-        description: result.error.message || "Profile image could not be removed.",
+        description:
+          result.error.message || "Profile image could not be removed.",
       });
       return;
     }
@@ -120,10 +125,15 @@ export default function ProfileForm() {
           className="profile-avatar group relative grid size-24 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-muted"
           htmlFor="profile-image-upload"
         >
-          <Avatar className="profile-avatar !size-full rounded-full bg-muted transition-colors group-hover:bg-muted/80" size="lg">
+          <Avatar
+            className="profile-avatar !size-full rounded-full bg-muted transition-colors group-hover:bg-muted/80"
+            size="lg"
+          >
             <AvatarImage src={imageUrl} alt="" />
             <AvatarFallback className="bg-muted text-3xl font-semibold text-primary">
-              {name.trim().slice(0, 1).toUpperCase() || <Camera size={24} aria-hidden="true" />}
+              {name.trim().slice(0, 1).toUpperCase() || (
+                <Camera size={24} aria-hidden="true" />
+              )}
             </AvatarFallback>
           </Avatar>
           <span className="absolute inset-0 grid place-items-center bg-foreground/70 text-background opacity-0 transition-opacity group-hover:opacity-100">
@@ -161,7 +171,12 @@ export default function ProfileForm() {
       </div>
       <Label className="w-full flex-col items-start gap-2">
         Name
-        <Input value={name} onChange={(event) => setName(event.target.value)} required minLength={2} />
+        <Input
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          required
+          minLength={2}
+        />
       </Label>
       <Label className="w-full flex-col items-start gap-2">
         Email

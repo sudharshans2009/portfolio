@@ -21,7 +21,7 @@ const eslintConfig = [
           caughtErrorsIgnorePattern: "^(_|ignore)",
         },
       ],
-    "react-hooks/set-state-in-effect": "off",
+      "react-hooks/set-state-in-effect": "off",
     },
   },
   {

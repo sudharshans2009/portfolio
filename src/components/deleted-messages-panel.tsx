@@ -18,7 +18,10 @@ function MessageAction({
   label: string;
   variant?: "default" | "destructive";
 }) {
-  const [state, formAction, pending] = useActionState(updateMessage, initialState);
+  const [state, formAction, pending] = useActionState(
+    updateMessage,
+    initialState,
+  );
 
   useEffect(() => {
     if (state.message) {
@@ -55,28 +58,48 @@ export default function DeletedMessagesPanel({
   }>;
 }) {
   if (messages.length === 0) {
-    return <p className="border-y border-border py-8 text-muted-foreground">No deleted messages.</p>;
+    return (
+      <p className="border-y border-border py-8 text-muted-foreground">
+        No deleted messages.
+      </p>
+    );
   }
 
   return (
     <section className="grid gap-4" aria-labelledby="deleted-messages-heading">
       <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4">
-        <h2 id="deleted-messages-heading" className="text-2xl font-semibold tracking-[-.04em]">Deleted messages</h2>
-        <span className="font-mono text-xs text-muted-foreground">{messages.length} items</span>
+        <h2
+          id="deleted-messages-heading"
+          className="text-2xl font-semibold tracking-[-.04em]"
+        >
+          Deleted messages
+        </h2>
+        <span className="font-mono text-xs text-muted-foreground">
+          {messages.length} items
+        </span>
       </div>
       {messages.map((item) => (
         <article key={item.id} className="grid gap-4 border border-border p-5">
           <div className="flex flex-wrap justify-between gap-3">
             <div>
               <p className="font-semibold">{item.name}</p>
-              <p className="break-all text-sm text-muted-foreground">{item.email}</p>
+              <p className="break-all text-sm text-muted-foreground">
+                {item.email}
+              </p>
             </div>
-            <time className="font-mono text-xs text-muted-foreground">{item.createdAt.toLocaleString()}</time>
+            <time className="font-mono text-xs text-muted-foreground">
+              {item.createdAt.toLocaleString()}
+            </time>
           </div>
           <p className="whitespace-pre-wrap text-sm leading-6">{item.body}</p>
           <div className="flex flex-wrap gap-2">
             <MessageAction id={item.id} action="restore" label="Restore" />
-            <MessageAction id={item.id} action="delete" label="Delete permanently" variant="destructive" />
+            <MessageAction
+              id={item.id}
+              action="delete"
+              label="Delete permanently"
+              variant="destructive"
+            />
           </div>
         </article>
       ))}

@@ -25,14 +25,16 @@ export default function ForgotPasswordPage() {
       toast.add({
         type: "error",
         title: "Reset email failed",
-        description: result.error.message || "The reset email could not be sent.",
+        description:
+          result.error.message || "The reset email could not be sent.",
       });
       return;
     }
     toast.add({
       type: "success",
       title: "Check your email",
-      description: "If an account exists for that address, a reset link is on its way.",
+      description:
+        "If an account exists for that address, a reset link is on its way.",
     });
   }
 
@@ -40,18 +42,35 @@ export default function ForgotPasswordPage() {
     <main className="mx-auto grid min-h-[760px] w-[min(1160px,calc(100%-2rem))] place-items-center py-24">
       <Card className="w-full max-w-[430px] p-9">
         <CardHeader>
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Account recovery</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+            Account recovery
+          </p>
           <CardTitle>Reset your password</CardTitle>
-          <p className="text-sm text-muted-foreground">Enter your email and we&apos;ll send you a secure reset link.</p>
+          <p className="text-sm text-muted-foreground">
+            Enter your email and we&apos;ll send you a secure reset link.
+          </p>
         </CardHeader>
         <CardContent>
           <form className="grid gap-5" onSubmit={submit}>
             <Label className="w-full flex-col items-start gap-2">
               Email
-              <Input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" />
+              <Input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                autoComplete="email"
+              />
             </Label>
-            <Button type="submit" disabled={pending}>{pending ? "Sending…" : "Send reset email"}</Button>
-            <Link className="text-center text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground" href="/user/sign-in">Back to login</Link>
+            <Button type="submit" disabled={pending}>
+              {pending ? "Sending…" : "Send reset email"}
+            </Button>
+            <Link
+              className="text-center text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+              href="/user/sign-in"
+            >
+              Back to login
+            </Link>
           </form>
         </CardContent>
       </Card>

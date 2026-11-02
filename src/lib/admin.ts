@@ -26,7 +26,8 @@ export async function getAdminSession() {
 
 export async function requireAdmin() {
   const session = await getAdminSession();
-  if (!session) throw new Error("You do not have permission to perform this action.");
+  if (!session)
+    throw new Error("You do not have permission to perform this action.");
   return session;
 }
 

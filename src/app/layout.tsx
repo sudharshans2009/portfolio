@@ -44,10 +44,7 @@ export default function FrontendLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${poppins.variable} ${jetBrainsMono.variable}`}
-    >
+    <html lang="en" className={`${poppins.variable} ${jetBrainsMono.variable}`}>
       <body className="font-sans">
         <QueryProvider>
           <TooltipProvider>

@@ -20,7 +20,8 @@ export function generateMetadata(
         ? siteConfig.description
         : second;
   const path = legacyCall ? first : typeof third === "string" ? third : "/";
-  const overrides = !legacyCall && typeof third !== "string" ? third : undefined;
+  const overrides =
+    !legacyCall && typeof third !== "string" ? third : undefined;
   const url = new URL(path, siteConfig.url).toString();
 
   return {

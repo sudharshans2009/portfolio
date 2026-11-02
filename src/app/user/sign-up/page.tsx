@@ -13,10 +13,14 @@ export default function SignUpPage() {
     <main className="mx-auto grid min-h-[760px] w-[min(1160px,calc(100%-2rem))] place-items-center py-24">
       <Card className="w-full max-w-[430px] p-9">
         <CardHeader>
-          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">Join SS.me</p>
+          <p className="font-mono text-[.7rem] uppercase tracking-[.08em] text-muted-foreground">
+            Join SS.me
+          </p>
           <CardTitle>Create an account</CardTitle>
         </CardHeader>
-        <CardContent><AuthForm mode="sign-up" /></CardContent>
+        <CardContent>
+          <AuthForm mode="sign-up" />
+        </CardContent>
       </Card>
     </main>
   );

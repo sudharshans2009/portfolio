@@ -43,7 +43,8 @@ export default function AccountSettings({
       toast.add({
         type: "error",
         title: "Password change failed",
-        description: result.error.message || "Your password could not be changed.",
+        description:
+          result.error.message || "Your password could not be changed.",
       });
       return;
     }
@@ -53,7 +54,8 @@ export default function AccountSettings({
     toast.add({
       type: "success",
       title: "Password changed",
-      description: "Your password has been updated and other sessions were signed out.",
+      description:
+        "Your password has been updated and other sessions were signed out.",
     });
   }
 
@@ -141,11 +143,24 @@ export default function AccountSettings({
           <form className="grid gap-4" onSubmit={changePassword}>
             <Label className="w-full flex-col items-start gap-2">
               Current password
-              <Input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required autoComplete="current-password" />
+              <Input
+                type="password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+                required
+                autoComplete="current-password"
+              />
             </Label>
             <Label className="w-full flex-col items-start gap-2">
               New password
-              <Input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required minLength={8} autoComplete="new-password" />
+              <Input
+                type="password"
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+                required
+                minLength={8}
+                autoComplete="new-password"
+              />
             </Label>
             <Button type="submit" disabled={pending}>
               {pending ? "Updating…" : "Change password"}

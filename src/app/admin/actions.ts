@@ -11,7 +11,13 @@ export type AdminActionState = { success: boolean; message: string };
 
 const failed = (error: unknown): AdminActionState => {
   console.error("Admin action failed", error);
-  return { success: false, message: error instanceof Error ? error.message : "The action could not be completed." };
+  return {
+    success: false,
+    message:
+      error instanceof Error
+        ? error.message
+        : "The action could not be completed.",
+  };
 };
 
 export async function updateUserRole(
@@ -22,12 +28,22 @@ export async function updateUserRole(
     await requireAdmin();
     const userId = z.string().min(1).parse(formData.get("userId"));
     const role = z.enum(["admin", "user"]).parse(formData.get("role"));
-    const [target] = await db.select({ email: user.email }).from(user).where(eq(user.id, userId)).limit(1);
+    const [target] = await db
+      .select({ email: user.email })
+      .from(user)
+      .where(eq(user.id, userId))
+      .limit(1);
     if (!target) return { success: false, message: "User not found." };
     if (target.email.toLowerCase() === OWNER_EMAIL) {
-      return { success: false, message: "The permanent owner cannot be demoted." };
+      return {
+        success: false,
+        message: "The permanent owner cannot be demoted.",
+      };
     }
-    await db.update(user).set({ role, updatedAt: new Date() }).where(eq(user.id, userId));
+    await db
+      .update(user)
+      .set({ role, updatedAt: new Date() })
+      .where(eq(user.id, userId));
     revalidatePath("/admin");
     return { success: true, message: `User updated to ${role}.` };
   } catch (error) {
@@ -54,18 +70,28 @@ export async function updateUser(
       email: formData.get("email"),
       role: formData.get("role"),
     });
-    const [target] = await db.select({ email: user.email }).from(user).where(eq(user.id, parsed.id)).limit(1);
+    const [target] = await db
+      .select({ email: user.email })
+      .from(user)
+      .where(eq(user.id, parsed.id))
+      .limit(1);
     if (!target) return { success: false, message: "User not found." };
     if (target.email.toLowerCase() === OWNER_EMAIL) {
-      return { success: false, message: "The permanent owner cannot be edited." };
+      return {
+        success: false,
+        message: "The permanent owner cannot be edited.",
+      };
     }
-    await db.update(user).set({
-      name: parsed.name,
-      email: parsed.email,
-      role: parsed.role,
-      emailVerified: false,
-      updatedAt: new Date(),
-    }).where(eq(user.id, parsed.id));
+    await db
+      .update(user)
+      .set({
+        name: parsed.name,
+        email: parsed.email,
+        role: parsed.role,
+        emailVerified: false,
+        updatedAt: new Date(),
+      })
+      .where(eq(user.id, parsed.id));
     revalidatePath("/admin");
     return { success: true, message: "User updated." };
   } catch (error) {
@@ -80,10 +106,17 @@ export async function deleteUser(
   try {
     await requireAdmin();
     const id = z.string().min(1).parse(formData.get("id"));
-    const [target] = await db.select({ email: user.email }).from(user).where(eq(user.id, id)).limit(1);
+    const [target] = await db
+      .select({ email: user.email })
+      .from(user)
+      .where(eq(user.id, id))
+      .limit(1);
     if (!target) return { success: false, message: "User not found." };
     if (target.email.toLowerCase() === OWNER_EMAIL) {
-      return { success: false, message: "The permanent owner cannot be deleted." };
+      return {
+        success: false,
+        message: "The permanent owner cannot be deleted.",
+      };
     }
     await db.delete(user).where(eq(user.id, id));
     revalidatePath("/admin");
@@ -100,13 +133,30 @@ export async function updateMessage(
   try {
     await requireAdmin();
     const id = z.string().min(1).parse(formData.get("id"));
-    const action = z.enum(["read", "trash", "restore", "delete"]).parse(formData.get("action"));
-    if (action === "read") await db.update(message).set({ read: true }).where(eq(message.id, id));
-    if (action === "trash") await db.update(message).set({ deletedAt: new Date() }).where(eq(message.id, id));
-    if (action === "restore") await db.update(message).set({ deletedAt: null }).where(eq(message.id, id));
+    const action = z
+      .enum(["read", "trash", "restore", "delete"])
+      .parse(formData.get("action"));
+    if (action === "read")
+      await db.update(message).set({ read: true }).where(eq(message.id, id));
+    if (action === "trash")
+      await db
+        .update(message)
+        .set({ deletedAt: new Date() })
+        .where(eq(message.id, id));
+    if (action === "restore")
+      await db
+        .update(message)
+        .set({ deletedAt: null })
+        .where(eq(message.id, id));
     if (action === "delete") await db.delete(message).where(eq(message.id, id));
     revalidatePath("/admin");
-    return { success: true, message: action === "delete" ? "Message permanently deleted." : "Message updated." };
+    return {
+      success: true,
+      message:
+        action === "delete"
+          ? "Message permanently deleted."
+          : "Message updated.",
+    };
   } catch (error) {
     return failed(error);
   }
@@ -147,18 +197,32 @@ export async function saveProject(
       description: parsed.description || null,
       url: parsed.url,
       language: parsed.language || null,
-      topics: parsed.topics.split(",").map((topic) => topic.trim()).filter(Boolean),
+      topics: parsed.topics
+        .split(",")
+        .map((topic) => topic.trim())
+        .filter(Boolean),
       featured: parsed.featured,
       visible: parsed.visible,
       updatedAt: new Date(),
     };
     const existing = parsed.id
-      ? await db.select({ id: project.id }).from(project).where(eq(project.id, parsed.id)).limit(1)
+      ? await db
+          .select({ id: project.id })
+          .from(project)
+          .where(eq(project.id, parsed.id))
+          .limit(1)
       : parsed.githubName
-        ? await db.select({ id: project.id }).from(project).where(eq(project.githubName, parsed.githubName)).limit(1)
+        ? await db
+            .select({ id: project.id })
+            .from(project)
+            .where(eq(project.githubName, parsed.githubName))
+            .limit(1)
         : [];
     if (existing[0]) {
-      await db.update(project).set(values).where(eq(project.id, existing[0].id));
+      await db
+        .update(project)
+        .set(values)
+        .where(eq(project.id, existing[0].id));
     } else {
       await db.insert(project).values({ id: crypto.randomUUID(), ...values });
     }
@@ -180,19 +244,39 @@ export async function deleteProject(
   try {
     await requireAdmin();
     const id = z.string().min(1).parse(formData.get("id"));
-    const githubName = z.string().trim().max(120).optional().parse(formData.get("githubName") || undefined);
+    const githubName = z
+      .string()
+      .trim()
+      .max(120)
+      .optional()
+      .parse(formData.get("githubName") || undefined);
     if (githubName) {
-      const [existing] = await db.select({ id: project.id }).from(project).where(eq(project.githubName, githubName)).limit(1);
+      const [existing] = await db
+        .select({ id: project.id })
+        .from(project)
+        .where(eq(project.githubName, githubName))
+        .limit(1);
       if (existing) {
-        await db.update(project).set({ visible: false, featured: false, updatedAt: new Date() }).where(eq(project.id, existing.id));
+        await db
+          .update(project)
+          .set({ visible: false, featured: false, updatedAt: new Date() })
+          .where(eq(project.id, existing.id));
       } else {
         await db.insert(project).values({
           id: crypto.randomUUID(),
           githubName,
           name: z.string().min(1).parse(formData.get("name")),
-          description: z.string().max(500).nullable().parse(formData.get("description") || null),
+          description: z
+            .string()
+            .max(500)
+            .nullable()
+            .parse(formData.get("description") || null),
           url: z.string().url().parse(formData.get("url")),
-          language: z.string().max(80).nullable().parse(formData.get("language") || null),
+          language: z
+            .string()
+            .max(80)
+            .nullable()
+            .parse(formData.get("language") || null),
           topics: [],
           featured: false,
           visible: false,

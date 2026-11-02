@@ -42,7 +42,13 @@ export default function ThemeToggle() {
   }`;
 
   return (
-    <Button className="font-mono text-[.68rem] capitalize" variant="outline" size="sm" onClick={cycleTheme} aria-label={label}>
+    <Button
+      className="font-mono text-[.68rem] capitalize"
+      variant="outline"
+      size="sm"
+      onClick={cycleTheme}
+      aria-label={label}
+    >
       <Icon size={14} aria-hidden="true" />
       <span>{theme}</span>
     </Button>

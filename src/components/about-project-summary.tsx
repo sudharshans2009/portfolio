@@ -25,8 +25,12 @@ export default function AboutProjectSummary({
       ].map(([label, value]) => (
         <Card key={label} className="bg-muted/20 p-0 shadow-none">
           <CardContent className="p-6">
-            <p className="font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground">{label}</p>
-            <p className="mt-5 text-5xl font-semibold tracking-[-.08em] text-primary">{value}</p>
+            <p className="font-mono text-[.68rem] uppercase tracking-[.08em] text-muted-foreground">
+              {label}
+            </p>
+            <p className="mt-5 text-5xl font-semibold tracking-[-.08em] text-primary">
+              {value}
+            </p>
           </CardContent>
         </Card>
       ))}

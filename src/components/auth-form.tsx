@@ -30,7 +30,8 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       toast.add({
         type: "error",
         title: isSignUp ? "Sign-up failed" : "Login failed",
-        description: result.error.message || "Authentication failed. Please try again.",
+        description:
+          result.error.message || "Authentication failed. Please try again.",
       });
       return;
     }
@@ -51,16 +52,34 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       {isSignUp && (
         <Label className="w-full flex-col items-start gap-2">
           Name
-          <Input value={name} onChange={(event) => setName(event.target.value)} required autoComplete="name" />
+          <Input
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+            autoComplete="name"
+          />
         </Label>
       )}
       <Label className="w-full flex-col items-start gap-2">
         Email
-        <Input value={email} onChange={(event) => setEmail(event.target.value)} type="email" required autoComplete="email" />
+        <Input
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          type="email"
+          required
+          autoComplete="email"
+        />
       </Label>
       <Label className="w-full flex-col items-start gap-2">
         Password
-        <Input value={password} onChange={(event) => setPassword(event.target.value)} type="password" required minLength={8} autoComplete={isSignUp ? "new-password" : "current-password"} />
+        <Input
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          type="password"
+          required
+          minLength={8}
+          autoComplete={isSignUp ? "new-password" : "current-password"}
+        />
       </Label>
       <Button type="submit" disabled={pending} size="lg">
         {pending ? "Please wait…" : isSignUp ? "Create account" : "Login"}
@@ -72,7 +91,10 @@ export default function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         </Link>
       </p>
       {!isSignUp && (
-        <Link className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground" href="/user/forgot-password">
+        <Link
+          className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+          href="/user/forgot-password"
+        >
           Forgot your password?
         </Link>
       )}

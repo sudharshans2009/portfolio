@@ -76,7 +76,12 @@ export default function ContactForm() {
             <FormItem className="min-w-0">
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} className="w-full min-w-0" maxLength={80} autoComplete="name" />
+                <Input
+                  {...field}
+                  className="w-full min-w-0"
+                  maxLength={80}
+                  autoComplete="name"
+                />
               </FormControl>
               <FormMessage name="name" />
             </FormItem>
@@ -96,7 +101,13 @@ export default function ContactForm() {
             <FormItem className="min-w-0">
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} className="w-full min-w-0" type="email" maxLength={254} autoComplete="email" />
+                <Input
+                  {...field}
+                  className="w-full min-w-0"
+                  type="email"
+                  maxLength={254}
+                  autoComplete="email"
+                />
               </FormControl>
               <FormMessage name="email" />
             </FormItem>
@@ -109,7 +120,12 @@ export default function ContactForm() {
             <FormItem className="min-w-0">
               <FormLabel>Message</FormLabel>
               <FormControl>
-                <Textarea {...field} className="w-full min-w-0 max-w-full" maxLength={5000} rows={7} />
+                <Textarea
+                  {...field}
+                  className="w-full min-w-0 max-w-full"
+                  maxLength={5000}
+                  rows={7}
+                />
               </FormControl>
               <FormMessage name="body" />
             </FormItem>
