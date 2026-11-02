@@ -13,21 +13,13 @@ export default function ProjectGroups({
   initialProjects: ManagedProject[];
 }) {
   const { data: projects } = useManagedProjects(initialProjects);
-  const groups = groupProjects(projects);
-  const groupedIds = new Set(
-    groups.flatMap((group) => group.projects.map((project) => project.id)),
-  );
-  const ungrouped = projects.filter((project) => !groupedIds.has(project.id));
-  const allGroups =
-    ungrouped.length > 0
-      ? [...groups, { title: "Other projects", projects: ungrouped }]
-      : groups;
+  const groups = groupProjects(projects).filter((group) => group.projects.length > 0);
 
   return (
     <>
-      {allGroups.length > 0 ? (
+      {groups.length > 0 ? (
         <div className="grid gap-[92px]">
-          {allGroups.map((group) => (
+          {groups.map((group) => (
             <section
               className="grid gap-7"
               key={group.title}
