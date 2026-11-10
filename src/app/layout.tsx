@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toast";
 import QueryProvider from "@/components/query-provider";
 import { siteConfig } from "@/lib/site-config";
+import { Analytics } from "@vercel/analytics/next";
 import "@/app/styles.css";
 
 const poppins = Poppins({
@@ -57,6 +58,7 @@ export default function FrontendLayout({
             </Toaster>
           </TooltipProvider>
         </QueryProvider>
+        <Analytics mode="production" />
       </body>
     </html>
   );
